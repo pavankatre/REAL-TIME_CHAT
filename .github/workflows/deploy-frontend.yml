@@ -9,10 +9,11 @@ permissions:
   contents: write
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -20,14 +21,13 @@ jobs:
           node-version: 18
 
       - name: Install and Build
-        working-directory: ./frontend
         run: |
+          cd frontend
           npm install
           npm run build -- --configuration=production
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          # Note the added /browser at the end
-          folder: frontend/dist/frontend/browser
+          folder: frontend/dist/frontend/browser # This matches the Angular application builder output
           branch: gh-pages
