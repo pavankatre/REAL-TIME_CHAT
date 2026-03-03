@@ -1,0 +1,80 @@
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
+    <mat-card class="max-w-2xl w-full p-8 rounded-xl shadow-lg relative">
+        <button mat-icon-button (click)="goBack()" class="absolute top-4 left-4" aria-label="Go back">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <div class="flex items-center space-x-6 mb-8 mt-4">
+            <div class="relative">
+                <img [src]="profile()?.avatarUrl || 'https://via.placeholder.com/100'" alt="Avatar"
+                    class="w-24 h-24 rounded-full object-cover shadow-sm bg-gray-200">
+                <span *ngIf="profile()?.status === 'online'"
+                    class="absolute bottom-0 right-0 block h-5 w-5 rounded-full ring-2 ring-white bg-green-400"></span>
+                <span *ngIf="profile()?.status === 'busy'"
+                    class="absolute bottom-0 right-0 block h-5 w-5 rounded-full ring-2 ring-white bg-red-500"></span>
+                <span *ngIf="profile()?.status === 'offline'"
+                    class="absolute bottom-0 right-0 block h-5 w-5 rounded-full ring-2 ring-white bg-gray-400"></span>
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">{{ profile()?.email }}</h2>
+                <p class="text-sm text-gray-500 capitalize">{{ profile()?.role }}</p>
+            </div>
+        </div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="space-y-6">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Avatar URL</mat-label>
+                <input matInput formControlName="avatarUrl" type="url" placeholder="https://example.com/avatar.jpg">
+                <mat-icon matPrefix>link</mat-icon>
+            </mat-form-field>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Nickname</mat-label>
+                    <input matInput formControlName="nickname" placeholder="Your display name">
+                    <mat-icon matPrefix>person</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Gender</mat-label>
+                    <mat-select formControlName="gender">
+                        <mat-option value="">Prefer not to say</mat-option>
+                        <mat-option value="male">Male</mat-option>
+                        <mat-option value="female">Female</mat-option>
+                        <mat-option value="other">Other</mat-option>
+                    </mat-select>
+                    <mat-icon matPrefix>wc</mat-icon>
+                </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Bio</mat-label>
+                <textarea matInput formControlName="bio" rows="4" placeholder="Tell us about yourself..."
+                    maxlength="500"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                    <mat-option value="online">Online</mat-option>
+                    <mat-option value="busy">Busy</mat-option>
+                    <mat-option value="offline">Appear Offline</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="message()" [ngClass]="{'text-green-600': isSuccess(), 'text-red-500': !isSuccess()}"
+                class="text-sm text-center">
+                {{ message() }}
+            </div>
+
+            <div class="flex justify-end space-x-4">
+                <button mat-flat-button color="primary" type="submit"
+                    [disabled]="profileForm.invalid || isLoading() || !profileForm.dirty" class="px-8 py-2">
+                    <span *ngIf="!isLoading()">Save Changes</span>
+                    <span *ngIf="isLoading()">Saving...</span>
+                </button>
+            </div>
+        </form>
+
+    </mat-card>
+</div>

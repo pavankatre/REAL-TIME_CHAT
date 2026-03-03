@@ -1,0 +1,29 @@
+import { z } from 'zod';
+import dotenv from 'dotenv';
+import path from 'path';
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+const envSchema = z.object({
+    PORT: z.string().transform(Number).default(5000),
+    NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+    MONGO_URI: z.string().url(),
+    JWT_SECRET: z.string().min(10),
+    JWT_EXPIRES_IN: z.string().default('15m'),
+    REFRESH_TOKEN_SECRET: z.string().min(10),
+    REFRESH_TOKEN_EXPIRES_IN: z.string().default('7d'),
+    EMAIL_HOST: z.string(),
+    EMAIL_PORT: z.string().transform(Number),
+    EMAIL_USER: z.string(),
+    EMAIL_PASS: z.string(),
+    EMAIL_FROM: z.string().email(),
+});
+
+const parsedEnv = envSchema.safeParse(process.env);
+
+if (!parsedEnv.success) {
+    console.error('Invalid environment variables', parsedEnv.error.format());
+    process.exit(1);
+}
+
+export const env = parsedEnv.data;

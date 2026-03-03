@@ -1,0 +1,111 @@
+﻿On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   .gitignore
+	new file:   README.md
+	new file:   backend/README.md
+	new file:   backend/package-lock.json
+	new file:   backend/package.json
+	new file:   backend/src/app.ts
+	new file:   backend/src/config/db.ts
+	new file:   backend/src/config/env.ts
+	new file:   backend/src/config/logger.ts
+	new file:   backend/src/controllers/auth.controller.ts
+	new file:   backend/src/controllers/chat.controller.ts
+	new file:   backend/src/controllers/user.controller.ts
+	new file:   backend/src/middlewares/auth.middleware.ts
+	new file:   backend/src/middlewares/error.middleware.ts
+	new file:   backend/src/middlewares/validate.middleware.ts
+	new file:   backend/src/models/conversation.model.ts
+	new file:   backend/src/models/message.model.ts
+	new file:   backend/src/models/user.model.ts
+	new file:   backend/src/routes/auth.routes.ts
+	new file:   backend/src/routes/chat.routes.ts
+	new file:   backend/src/routes/user.routes.ts
+	new file:   backend/src/server.ts
+	new file:   backend/src/services/email.service.ts
+	new file:   backend/src/services/jwt.service.ts
+	new file:   backend/src/services/socket.service.ts
+	new file:   backend/src/utils/validators.ts
+	new file:   backend/tsconfig.json
+	new file:   frontend/.editorconfig
+	new file:   frontend/.gitignore
+	new file:   frontend/.postcssrc.json
+	new file:   frontend/README.md
+	new file:   frontend/angular.json
+	new file:   frontend/package-lock.json
+	new file:   frontend/package.json
+	new file:   frontend/public/favicon.ico
+	new file:   frontend/src/app/app.component.css
+	new file:   frontend/src/app/app.component.html
+	new file:   frontend/src/app/app.component.spec.ts
+	new file:   frontend/src/app/app.component.ts
+	new file:   frontend/src/app/app.config.ts
+	new file:   frontend/src/app/app.routes.ts
+	new file:   frontend/src/app/core/guards/admin.guard.ts
+	new file:   frontend/src/app/core/guards/auth.guard.ts
+	new file:   frontend/src/app/core/interceptors/jwt.interceptor.ts
+	new file:   frontend/src/app/core/services/auth.service.ts
+	new file:   frontend/src/app/core/services/chat.service.ts
+	new file:   frontend/src/app/core/services/socket.service.ts
+	new file:   frontend/src/app/core/services/user.service.ts
+	new file:   frontend/src/app/features/auth/forgot-password/forgot-password.component.css
+	new file:   frontend/src/app/features/auth/forgot-password/forgot-password.component.html
+	new file:   frontend/src/app/features/auth/forgot-password/forgot-password.component.spec.ts
+	new file:   frontend/src/app/features/auth/forgot-password/forgot-password.component.ts
+	new file:   frontend/src/app/features/auth/login/login.component.css
+	new file:   frontend/src/app/features/auth/login/login.component.html
+	new file:   frontend/src/app/features/auth/login/login.component.spec.ts
+	new file:   frontend/src/app/features/auth/login/login.component.ts
+	new file:   frontend/src/app/features/auth/otp/otp.component.css
+	new file:   frontend/src/app/features/auth/otp/otp.component.html
+	new file:   frontend/src/app/features/auth/otp/otp.component.spec.ts
+	new file:   frontend/src/app/features/auth/otp/otp.component.ts
+	new file:   frontend/src/app/features/auth/register/register.component.css
+	new file:   frontend/src/app/features/auth/register/register.component.html
+	new file:   frontend/src/app/features/auth/register/register.component.spec.ts
+	new file:   frontend/src/app/features/auth/register/register.component.ts
+	new file:   frontend/src/app/features/auth/reset-password/reset-password.component.css
+	new file:   frontend/src/app/features/auth/reset-password/reset-password.component.html
+	new file:   frontend/src/app/features/auth/reset-password/reset-password.component.spec.ts
+	new file:   frontend/src/app/features/auth/reset-password/reset-password.component.ts
+	new file:   frontend/src/app/features/chat/chat-window/chat-window.component.css
+	new file:   frontend/src/app/features/chat/chat-window/chat-window.component.html
+	new file:   frontend/src/app/features/chat/chat-window/chat-window.component.spec.ts
+	new file:   frontend/src/app/features/chat/chat-window/chat-window.component.ts
+	new file:   frontend/src/app/features/chat/create-group-modal/create-group-modal.component.css
+	new file:   frontend/src/app/features/chat/create-group-modal/create-group-modal.component.html
+	new file:   frontend/src/app/features/chat/create-group-modal/create-group-modal.component.spec.ts
+	new file:   frontend/src/app/features/chat/create-group-modal/create-group-modal.component.ts
+	new file:   frontend/src/app/features/chat/group-settings-modal/group-settings-modal.component.css
+	new file:   frontend/src/app/features/chat/group-settings-modal/group-settings-modal.component.html
+	new file:   frontend/src/app/features/chat/group-settings-modal/group-settings-modal.component.spec.ts
+	new file:   frontend/src/app/features/chat/group-settings-modal/group-settings-modal.component.ts
+	new file:   frontend/src/app/features/chat/message-bubble/message-bubble.component.css
+	new file:   frontend/src/app/features/chat/message-bubble/message-bubble.component.html
+	new file:   frontend/src/app/features/chat/message-bubble/message-bubble.component.spec.ts
+	new file:   frontend/src/app/features/chat/message-bubble/message-bubble.component.ts
+	new file:   frontend/src/app/features/home/home.component.css
+	new file:   frontend/src/app/features/home/home.component.html
+	new file:   frontend/src/app/features/home/home.component.spec.ts
+	new file:   frontend/src/app/features/home/home.component.ts
+	new file:   frontend/src/app/features/profile/profile.component.css
+	new file:   frontend/src/app/features/profile/profile.component.html
+	new file:   frontend/src/app/features/profile/profile.component.spec.ts
+	new file:   frontend/src/app/features/profile/profile.component.ts
+	new file:   frontend/src/environments/environment.ts
+	new file:   frontend/src/index.html
+	new file:   frontend/src/main.ts
+	new file:   frontend/src/styles.css
+	new file:   frontend/tsconfig.app.json
+	new file:   frontend/tsconfig.json
+	new file:   frontend/tsconfig.spec.json
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	git_debug.txt
+	status_utf8.txt
+

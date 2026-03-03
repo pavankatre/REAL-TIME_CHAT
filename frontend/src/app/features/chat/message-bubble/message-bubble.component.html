@@ -1,0 +1,37 @@
+<div [ngClass]="isMine ? 'flex justify-end' : 'flex justify-start'" class="mb-4 w-full">
+    <div class="flex flex-col" [ngClass]="isMine ? 'items-end' : 'items-start'">
+        <!-- Sender Name for Groups -->
+        <span *ngIf="isGroup && !isMine" class="text-xs text-gray-500 mb-1 ml-2 font-medium">
+            {{ message.sender.email.split('@')[0] }}
+        </span>
+
+        <div class="max-w-[75%] px-4 py-2 rounded-2xl relative shadow-sm"
+            [ngClass]="isMine ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'">
+            <!-- Message Text -->
+            <p class="text-sm break-words">{{ message.text }}</p>
+
+            <!-- Metadata / Receipts -->
+            <div class="flex items-center justify-end mt-1 space-x-1"
+                [ngClass]="isMine ? 'text-indigo-200' : 'text-gray-400'">
+                <span class="text-[10px] whitespace-nowrap">{{ message.createdAt | date:'shortTime' }}</span>
+
+                <ng-container *ngIf="isMine">
+                    <!-- Default to Sent if status is missing -->
+                    <mat-icon *ngIf="!message.status || message.status === 'sent'"
+                        class="text-[16px] leading-none w-[16px] h-[16px] text-white opacity-80"
+                        title="Sent">done</mat-icon>
+
+                    <!-- Delivered (Double Check) -->
+                    <mat-icon *ngIf="message.status === 'delivered'"
+                        class="text-[16px] leading-none w-[16px] h-[16px] text-white opacity-100"
+                        title="Delivered">done_all</mat-icon>
+
+                    <!-- Seen (Double Check filled/colored) -->
+                    <mat-icon *ngIf="message.status === 'seen'"
+                        class="text-[16px] leading-none w-[16px] h-[16px] text-green-300 font-bold"
+                        title="Seen">done_all</mat-icon>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
