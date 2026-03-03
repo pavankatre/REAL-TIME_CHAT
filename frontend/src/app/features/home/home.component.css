@@ -1,0 +1,22 @@
+/* HomeComponent styles */
+:host ::ng-deep .hide-subscript .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+
+:host ::ng-deep .mat-mdc-list-item {
+    height: auto !important;
+}
+
+:host ::ng-deep .mat-mdc-card-header {
+    padding: 0 !important;
+}
+
+:host ::ng-deep .mat-mdc-card-header-text {
+    margin: 0 !important;
+    width: 100%;
+}
+
+.bg-clip-text {
+    -webkit-background-clip: text;
+    background-clip: text;
+}

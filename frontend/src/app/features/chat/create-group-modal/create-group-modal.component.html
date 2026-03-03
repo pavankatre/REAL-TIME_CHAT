@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>Create New Group</h2>
+<mat-dialog-content class="w-full max-w-md pt-4">
+
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Group Name</label>
+        <input type="text" [(ngModel)]="groupName" placeholder="E.g. Engineering Team"
+            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none">
+    </div>
+
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Search Participants</label>
+        <div class="relative">
+            <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearch()" placeholder="Search users..."
+                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none pl-10">
+            <mat-icon class="absolute left-3 top-2.5 text-gray-400">search</mat-icon>
+        </div>
+
+        <!-- Search Results -->
+        <div *ngIf="searchResults().length > 0" class="mt-2 border rounded-md max-h-40 overflow-y-auto">
+            <div *ngFor="let user of searchResults()"
+                class="p-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between"
+                (click)="toggleSelection(user)">
+                <div class="flex items-center space-x-2">
+                    <img [src]="user.avatarUrl || 'https://via.placeholder.com/30'"
+                        class="w-6 h-6 rounded-full object-cover bg-gray-200">
+                    <span class="text-sm font-medium">{{ user.email }}</span>
+                </div>
+                <mat-icon *ngIf="isSelected(user)" class="text-brand-green text-sm">check_circle</mat-icon>
+            </div>
+        </div>
+    </div>
+
+    <!-- Selected Chips -->
+    <div *ngIf="selectedUsers().length > 0" class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Selected ({{ selectedUsers().length }})</label>
+        <mat-chip-set>
+            <mat-chip *ngFor="let user of selectedUsers()" (removed)="toggleSelection(user)">
+                {{ user.email.split('@')[0] }}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+        </mat-chip-set>
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="pb-4 pr-4">
+    <button mat-button (click)="dialogRef.close()">Cancel</button>
+    <button mat-flat-button color="primary"
+        [disabled]="selectedUsers().length === 0 || !groupName.trim() || isLoading()" (click)="createGroup()">
+        Create
+    </button>
+</mat-dialog-actions>

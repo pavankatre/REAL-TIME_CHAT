@@ -1,0 +1,44 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <mat-card class="max-w-md w-full space-y-8 p-8 rounded-xl shadow-lg">
+        <div class="text-center">
+            <h2 class="mt-4 text-3xl font-extrabold text-gray-900">Verify OTP</h2>
+            <p class="mt-2 text-sm text-gray-600">We sent a 6-digit code to</p>
+            <p class="font-medium text-gray-900">{{ maskedEmail() }}</p>
+        </div>
+
+        <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
+            <mat-form-field appearance="outline" class="w-full text-center tracking-[1em]">
+                <mat-label>6-Digit OTP</mat-label>
+                <input matInput formControlName="otp" type="text" maxlength="6" pattern="\\d{6}" placeholder="------"
+                    class="text-center text-lg tracking-[1em]" required>
+                <mat-error *ngIf="otpForm.get('otp')?.hasError('required')">OTP is required</mat-error>
+                <mat-error
+                    *ngIf="otpForm.get('otp')?.hasError('pattern') || otpForm.get('otp')?.hasError('minlength')">Must be
+                    exactly 6 digits</mat-error>
+            </mat-form-field>
+
+            <div *ngIf="errorMessage()" class="text-red-500 text-sm text-center">
+                {{ errorMessage() }}
+            </div>
+            <div *ngIf="successMessage()" class="text-green-600 text-sm text-center">
+                {{ successMessage() }}
+            </div>
+
+            <div>
+                <button mat-flat-button color="primary" type="submit" [disabled]="otpForm.invalid || isLoading()"
+                    class="w-full py-2 text-lg">
+                    <span *ngIf="!isLoading()">Verify</span>
+                    <span *ngIf="isLoading()">Verifying...</span>
+                </button>
+            </div>
+
+            <div class="text-center mt-4">
+                <button mat-button type="button" (click)="resendOtp()"
+                    [disabled]="resendCountdown() > 0 || isResending()">
+                    <span *ngIf="resendCountdown() > 0">Resend Code in {{ resendCountdown() }}s</span>
+                    <span *ngIf="resendCountdown() === 0">Resend Code</span>
+                </button>
+            </div>
+        </form>
+    </mat-card>
+</div>
