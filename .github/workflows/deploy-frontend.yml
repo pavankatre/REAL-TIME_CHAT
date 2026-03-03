@@ -31,3 +31,4 @@ jobs:
         with:
           folder: frontend/dist/frontend/browser # This matches the Angular application builder output
           branch: gh-pages
+          
