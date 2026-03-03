@@ -11,7 +11,8 @@ const app: Application = express();
 app.use(helmet());
 app.use(
     cors({
-        origin: 'http://localhost:4200', // Angular default port
+        // origin: 'http://localhost:4200', // Angular default port
+        origin: 'https://pavankatre.github.io', // Angular default port
         credentials: true,
     })
 );
