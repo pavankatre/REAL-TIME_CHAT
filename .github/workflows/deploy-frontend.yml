@@ -30,5 +30,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: frontend/dist/frontend/browser
-          branch: gh-pages# Manual Trigger Run 4
-# Manual Trigger Run 4
+          branch: gh-pages
