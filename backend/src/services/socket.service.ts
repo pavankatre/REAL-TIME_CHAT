@@ -12,9 +12,17 @@ import { createClient } from 'redis';
 import { Message } from '../models/message.model';
 
 export const initSocketServer = async (httpServer: HttpServer) => {
+    const allowedOrigins = env.ALLOWED_ORIGINS.split(',');
+
     io = new Server(httpServer, {
         cors: {
-            origin: 'http://localhost:4200',
+            origin: (origin, callback) => {
+                if (!origin || allowedOrigins.includes(origin)) {
+                    callback(null, true);
+                } else {
+                    callback(new Error('Not allowed by CORS'));
+                }
+            },
             methods: ['GET', 'POST', 'PUT', 'DELETE'],
             credentials: true
         }
