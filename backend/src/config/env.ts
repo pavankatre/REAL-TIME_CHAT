@@ -17,6 +17,7 @@ const envSchema = z.object({
     EMAIL_USER: z.string(),
     EMAIL_PASS: z.string(),
     EMAIL_FROM: z.string().email(),
+    ALLOWED_ORIGINS: z.string().default('http://localhost:4200,https://pavankatre.github.io'),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

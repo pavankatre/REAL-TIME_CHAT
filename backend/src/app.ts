@@ -4,14 +4,24 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middlewares/error.middleware';
+import { env } from './config/env';
 
 const app: Application = express();
 
 // Security Middleware
 app.use(helmet());
+
+const allowedOrigins = env.ALLOWED_ORIGINS.split(',');
+
 app.use(
     cors({
-        origin: 'http://localhost:4200', // Angular default port
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         credentials: true,
     })
 );
