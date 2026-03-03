@@ -18,6 +18,8 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "outputPath": "dist/frontend",
+            "baseHref": "/REAL-TIME_CHAT/",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
