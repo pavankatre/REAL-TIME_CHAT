@@ -16,6 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendOTP = async (to: string, otp: string) => {
+    logger.debug(`SMTP Config: host=${env.EMAIL_HOST}, port=${env.EMAIL_PORT}, user=${env.EMAIL_USER}, secure=${env.EMAIL_PORT === 465}`);
     try {
         const info = await transporter.sendMail({
             from: `"Support" <${env.EMAIL_FROM}>`,
@@ -28,10 +29,10 @@ export const sendOTP = async (to: string, otp: string) => {
     } catch (error: any) {
         logger.error('Error sending OTP email:', {
             message: error.message,
-            stack: error.stack,
             code: error.code,
             command: error.command
         });
-        throw new Error('Failed to send OTP email');
+        // Throw the specific error message to help identify if it's AUTH, TIMEOUT, or something else
+        throw new Error(error.message || 'Unknown SMTP error');
     }
 };
