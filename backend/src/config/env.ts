@@ -28,4 +28,10 @@ if (!parsedEnv.success) {
     process.exit(1);
 }
 
+// Diagnostic logging for production debugging
+console.log('--- Environment Load Check ---');
+console.log('RESEND_API_KEY present in process.env:', !!process.env.RESEND_API_KEY);
+console.log('RESEND_API_KEY starts with re_:', process.env.RESEND_API_KEY?.startsWith('re_'));
+console.log('------------------------------');
+
 export const env = parsedEnv.data;
