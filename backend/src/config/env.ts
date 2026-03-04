@@ -12,11 +12,12 @@ const envSchema = z.object({
     JWT_EXPIRES_IN: z.string().default('15m'),
     REFRESH_TOKEN_SECRET: z.string().min(10),
     REFRESH_TOKEN_EXPIRES_IN: z.string().default('7d'),
-    EMAIL_HOST: z.string(),
-    EMAIL_PORT: z.string().transform(Number),
-    EMAIL_USER: z.string(),
-    EMAIL_PASS: z.string(),
+    EMAIL_HOST: z.string().optional(),
+    EMAIL_PORT: z.string().transform(Number).optional(),
+    EMAIL_USER: z.string().optional(),
+    EMAIL_PASS: z.string().optional(),
     EMAIL_FROM: z.string().email(),
+    RESEND_API_KEY: z.string().startsWith('re_').optional(), // API keys start with re_
     ALLOWED_ORIGINS: z.string().default('http://localhost:4200,https://pavankatre.github.io'),
 });
 
