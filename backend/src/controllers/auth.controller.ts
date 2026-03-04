@@ -31,6 +31,14 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         const otp = generateRandomOTP();
         const otpExpires = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
+        // Send OTP first. If it fails, we don't create the user.
+        try {
+            await sendOTP(email, otp);
+        } catch (error) {
+            res.status(500);
+            throw new Error('Failed to send OTP email. Please try again.');
+        }
+
         const user = await User.create({
             email,
             password,
@@ -39,8 +47,6 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
             lastOtpSentAt: new Date(),
             isVerified: false,
         });
-
-        await sendOTP(user.email, otp);
 
         res.status(201).json({
             message: 'User registered. Please check your email for the OTP.',
