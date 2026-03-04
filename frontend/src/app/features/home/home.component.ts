@@ -107,6 +107,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/chat', conversationId]);
   }
 
+  deleteConversation(event: MouseEvent, conversationId: string) {
+    event.stopPropagation(); // Prevent opening the chat
+
+    if (confirm('Are you sure you want to delete this chat? This will clear the history for you.')) {
+      this.chatService.deleteConversation(conversationId).subscribe({
+        next: () => {
+          // Update local state
+          this.conversations.update(convos => convos.filter(c => c._id !== conversationId));
+        },
+        error: (err) => {
+          console.error('Error deleting conversation:', err);
+          alert('Failed to delete conversation');
+        }
+      });
+    }
+  }
+
   openCreateGroup() {
     const dialogRef = this.dialog.open(CreateGroupModal, {
       width: '500px',

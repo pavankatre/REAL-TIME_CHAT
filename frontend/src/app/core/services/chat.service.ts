@@ -72,4 +72,8 @@ export class ChatService {
     getMessages(conversationId: string, page: number = 1, limit: number = 20): Observable<PaginatedMessages> {
         return this.http.get<PaginatedMessages>(`${this.apiUrl}/conversations/${conversationId}/messages?page=${page}&limit=${limit}`, { withCredentials: true });
     }
+
+    deleteConversation(conversationId: string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/conversations/${conversationId}`, { withCredentials: true });
+    }
 }

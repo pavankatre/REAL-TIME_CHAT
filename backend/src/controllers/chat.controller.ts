@@ -42,9 +42,16 @@ export const getConversations = async (req: AuthRequest, res: Response) => {
         })
             .populate('participants', '_id email nickname avatarUrl status lastSeen')
             .populate('lastMessage')
-            .sort({ updatedAt: -1 }); // Sort by latest activity
+            .sort({ updatedAt: -1 });
 
-        res.json(conversations);
+        // Filter out conversations where user.deletedAt > conversation.updatedAt
+        const activeConversations = conversations.filter(convo => {
+            const deleteStat = convo.deleteStats?.find(s => s.user.toString() === currentUserId.toString());
+            if (!deleteStat || !deleteStat.deletedAt) return true;
+            return new Date(convo.updatedAt) > new Date(deleteStat.deletedAt);
+        });
+
+        res.json(activeConversations);
     } catch (error: any) {
         res.status(res.statusCode === 200 ? 500 : res.statusCode);
         throw new Error(error.message || 'Error fetching conversations');
@@ -74,14 +81,23 @@ export const getMessages = async (req: AuthRequest, res: Response) => {
 
         const skip = (page - 1) * limit;
 
-        const messages = await Message.find({ conversationId })
+        // Find user's deletion timestamp for this conversation
+        const deleteStat = conversation.deleteStats?.find(s => s.user.toString() === currentUserId.toString());
+        const deletedAt = deleteStat?.deletedAt;
+
+        const messageQuery: any = { conversationId };
+        if (deletedAt) {
+            messageQuery.createdAt = { $gt: deletedAt };
+        }
+
+        const messages = await Message.find(messageQuery)
             .sort({ createdAt: -1 }) // Get newest first
             .skip(skip)
             .limit(limit)
             .populate('sender', '_id email nickname');
 
         // Total documents count for frontend pagination knowledge
-        const total = await Message.countDocuments({ conversationId });
+        const total = await Message.countDocuments(messageQuery);
 
         res.json({
             messages: messages.reverse(), // Reverse to send chronological order (oldest to newest) to UI
@@ -227,5 +243,50 @@ export const updateGroup = async (req: AuthRequest, res: Response) => {
     } catch (error: any) {
         res.status(res.statusCode === 200 ? 500 : res.statusCode);
         throw new Error(error.message || 'Error updating group');
+    }
+};
+
+// @desc    Delete (Hide) a conversation for the current user
+// @route   DELETE /api/chat/conversations/:conversationId
+// @access  Private
+export const deleteConversation = async (req: AuthRequest, res: Response) => {
+    try {
+        const { conversationId } = req.params;
+        const currentUserId = req.user?._id;
+
+        const conversation = await Conversation.findOne({
+            _id: conversationId,
+            participants: { $in: [currentUserId] }
+        });
+
+        if (!conversation) {
+            res.status(404);
+            throw new Error('Conversation not found or not authorized');
+        }
+
+        // Update or add deleteStat for this user
+        if (!conversation.deleteStats) {
+            conversation.deleteStats = [];
+        }
+
+        const userStatIndex = conversation.deleteStats.findIndex(
+            (s) => s.user.toString() === currentUserId.toString()
+        );
+
+        if (userStatIndex > -1) {
+            conversation.deleteStats[userStatIndex].deletedAt = new Date();
+        } else {
+            conversation.deleteStats.push({
+                user: currentUserId,
+                deletedAt: new Date()
+            });
+        }
+
+        await conversation.save();
+
+        res.json({ message: 'Conversation deleted successfully' });
+    } catch (error: any) {
+        res.status(res.statusCode === 200 ? 500 : res.statusCode);
+        throw new Error(error.message || 'Error deleting conversation');
     }
 };

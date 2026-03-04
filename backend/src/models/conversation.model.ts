@@ -6,6 +6,10 @@ export interface IConversation extends Document {
     isGroup: boolean;
     groupName?: string;
     admin?: mongoose.Types.ObjectId;
+    deleteStats?: {
+        user: mongoose.Types.ObjectId;
+        deletedAt: Date;
+    }[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -33,7 +37,13 @@ const conversationSchema = new Schema<IConversation>(
         admin: {
             type: Schema.Types.ObjectId,
             ref: 'User',
-        }
+        },
+        deleteStats: [
+            {
+                user: { type: Schema.Types.ObjectId, ref: 'User' },
+                deletedAt: { type: Date }
+            }
+        ]
     },
     {
         timestamps: true,
