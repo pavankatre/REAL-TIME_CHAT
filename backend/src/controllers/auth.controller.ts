@@ -34,9 +34,10 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         // Send OTP first. If it fails, we don't create the user.
         try {
             await sendOTP(email, otp);
-        } catch (error) {
+        } catch (error: any) {
+            console.error('Registration failed at email step:', error);
             res.status(500);
-            throw new Error('Failed to send OTP email. Please try again.');
+            throw new Error(`Failed to send OTP email: ${error.message || 'Unknown error'}. Please try again.`);
         }
 
         const user = await User.create({
