@@ -120,6 +120,15 @@
                                         </p>
                                     </div>
                                 </div>
+
+                                <!-- Delete Conversation Button -->
+                                <div
+                                    class="shrink-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button mat-icon-button color="warn" class="scale-90"
+                                        (click)="deleteConversation($event, convo._id)" matTooltip="Delete Chat">
+                                        <mat-icon>delete_outline</mat-icon>
+                                    </button>
+                                </div>
                             </div>
                         </mat-list-item>
 

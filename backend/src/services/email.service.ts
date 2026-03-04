@@ -21,8 +21,13 @@ export const sendOTP = async (to: string, otp: string) => {
             html: `<b>Your OTP is ${otp}</b><br>It will expire in 10 minutes.`,
         });
         logger.info(`Message sent: ${info.messageId}`);
-    } catch (error) {
-        logger.error('Error sending OTP email', error);
+    } catch (error: any) {
+        logger.error('Error sending OTP email:', {
+            message: error.message,
+            stack: error.stack,
+            code: error.code,
+            command: error.command
+        });
         throw new Error('Failed to send OTP email');
     }
 };
