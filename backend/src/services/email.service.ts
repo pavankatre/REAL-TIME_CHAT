@@ -3,14 +3,16 @@ import { env } from '../config/env';
 import { logger } from '../config/logger';
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: env.EMAIL_HOST,
+    port: env.EMAIL_PORT,
+    secure: env.EMAIL_PORT === 465, // true for 465 (SSL), false for 587 (TLS/STARTTLS)
     auth: {
         user: env.EMAIL_USER,
         pass: env.EMAIL_PASS,
     },
-    connectionTimeout: 10000, // 10 seconds
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
+    connectionTimeout: 15000, // 15 seconds
+    greetingTimeout: 15000,
+    socketTimeout: 20000,
 });
 
 export const sendOTP = async (to: string, otp: string) => {
