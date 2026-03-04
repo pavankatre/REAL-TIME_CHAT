@@ -17,8 +17,12 @@ const transporter = nodemailer.createTransport({
 
 export const sendOTP = async (to: string, otp: string) => {
     // Phase 4: Use Resend REST API if key is available (Recommended for Render)
+    console.log('--- SendOTP Execution Check ---');
+    console.log('RESEND_API_KEY available in env object:', !!env.RESEND_API_KEY);
+    console.log('fetch is available:', typeof fetch !== 'undefined');
+    console.log('------------------------------');
+
     if (env.RESEND_API_KEY) {
-        logger.info('Using Resend API for email delivery');
         try {
             const response = await fetch('https://api.resend.com/emails', {
                 method: 'POST',
