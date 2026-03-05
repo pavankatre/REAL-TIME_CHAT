@@ -23,6 +23,7 @@ export const sendOTP = async (to: string, otp: string) => {
     console.log('------------------------------');
 
     if (env.RESEND_API_KEY) {
+        logger.info('Using Resend API for email delivery');
         try {
             const response = await fetch('https://api.resend.com/emails', {
                 method: 'POST',
@@ -49,6 +50,40 @@ export const sendOTP = async (to: string, otp: string) => {
         } catch (error: any) {
             logger.error('Resend API failure:', error);
             throw new Error(`Failed to send email via Resend: ${error.message}`);
+        }
+    }
+
+    // Phase 5: Use SendGrid REST API if key is available (Supports Single Sender Verification)
+    if (env.SENDGRID_API_KEY) {
+        logger.info('Using SendGrid API for email delivery');
+        try {
+            const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${env.SENDGRID_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    personalizations: [{ to: [{ email: to }] }],
+                    from: { email: env.EMAIL_FROM },
+                    subject: 'Your OTP Code',
+                    content: [{
+                        type: 'text/html',
+                        value: `<b>Your OTP is ${otp}</b><br>It will expire in 10 minutes.`
+                    }]
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`SendGrid API Error: ${JSON.stringify(errorData)}`);
+            }
+
+            logger.info('Email sent via SendGrid');
+            return;
+        } catch (error: any) {
+            logger.error('SendGrid API failure:', error);
+            throw new Error(`Failed to send email via SendGrid: ${error.message}`);
         }
     }
 
