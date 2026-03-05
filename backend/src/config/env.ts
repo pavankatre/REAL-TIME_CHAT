@@ -17,7 +17,8 @@ const envSchema = z.object({
     EMAIL_USER: z.string().optional(),
     EMAIL_PASS: z.string().optional(),
     EMAIL_FROM: z.string().email(),
-    RESEND_API_KEY: z.string().startsWith('re_').optional(), // API keys start with re_
+    RESEND_API_KEY: z.string().startsWith('re_').optional(),
+    SENDGRID_API_KEY: z.string().startsWith('SG.').optional(),
     ALLOWED_ORIGINS: z.string().default('http://localhost:4200,https://pavankatre.github.io'),
 });
 
