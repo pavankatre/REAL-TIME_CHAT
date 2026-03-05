@@ -20,7 +20,7 @@ const setRefreshTokenCookie = (res: Response, token: string) => {
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, nickname, gender } = req.body;
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -43,6 +43,8 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         const user = await User.create({
             email,
             password,
+            nickname,
+            gender,
             otp,
             otpExpires,
             lastOtpSentAt: new Date(),

@@ -9,7 +9,7 @@
         <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
             <mat-form-field appearance="outline" class="w-full text-center tracking-[1em]">
                 <mat-label>6-Digit OTP</mat-label>
-                <input matInput formControlName="otp" type="text" maxlength="6" pattern="\\d{6}" placeholder="------"
+                <input matInput formControlName="otp" type="text" maxlength="6"
                     class="text-center text-lg tracking-[1em]" required>
                 <mat-error *ngIf="otpForm.get('otp')?.hasError('required')">OTP is required</mat-error>
                 <mat-error

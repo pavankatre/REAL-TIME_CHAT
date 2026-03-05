@@ -8,11 +8,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, MatCardModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, MatCardModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatSelectModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -29,8 +30,30 @@ export class RegisterComponent {
   ) {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
+      nickname: ['', [Validators.required]],
+      gender: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
+    }, { validators: this.passwordMatchValidator });
+  }
+
+  passwordMatchValidator(g: FormGroup) {
+    const password = g.get('password')?.value;
+    const confirmPassword = g.get('confirmPassword')?.value;
+    const control = g.get('confirmPassword');
+
+    if (password !== confirmPassword) {
+      control?.setErrors({ ...control.errors, 'mismatch': true });
+      return { 'mismatch': true };
+    } else {
+      // If they match, we need to remove our 'mismatch' error but keep others (like required)
+      if (control?.hasError('mismatch')) {
+        const errors = { ...control.errors };
+        delete errors['mismatch'];
+        control.setErrors(Object.keys(errors).length ? errors : null);
+      }
+      return null;
+    }
   }
 
   togglePasswordVisibility() {
@@ -42,11 +65,15 @@ export class RegisterComponent {
       this.isLoading.set(true);
       this.errorMessage.set(null);
 
-      this.authService.register(this.registerForm.value).subscribe({
+      // Extract only the fields needed by the backend
+      const { email, password, nickname, gender } = this.registerForm.value;
+      const payload = { email, password, nickname, gender };
+
+      this.authService.register(payload).subscribe({
         next: () => {
           this.isLoading.set(false);
           // Pass the email in state so OTP component doesn't need to ask for it again
-          this.router.navigate(['/otp'], { state: { email: this.registerForm.value.email } });
+          this.router.navigate(['/otp'], { state: { email } });
         },
         error: (err: any) => {
           this.isLoading.set(false);
