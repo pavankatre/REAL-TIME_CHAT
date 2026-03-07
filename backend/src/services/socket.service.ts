@@ -10,6 +10,8 @@ const userSockets = new Map<string, string>(); // userId -> socketId
 import { createAdapter } from '@socket.io/redis-adapter';
 import { createClient } from 'redis';
 import { Message } from '../models/message.model';
+import { Conversation } from '../models/conversation.model';
+import { PushService } from './push.service';
 
 export const initSocketServer = async (httpServer: HttpServer) => {
     const allowedOrigins = env.ALLOWED_ORIGINS.split(',');
@@ -104,10 +106,35 @@ export const initSocketServer = async (httpServer: HttpServer) => {
                     status: 'sent'
                 });
 
-                const populatedMessage = await message.populate('sender', '_id email avatarUrl');
+                const populatedMessage = await message.populate('sender', '_id email avatarUrl nickname');
                 io.to(data.conversationId).emit('new_message', populatedMessage);
+
+                // Trigger Push Notifications for background users
+                const conversation = await Conversation.findById(data.conversationId);
+                if (conversation) {
+                    const senderName = (populatedMessage.sender as any).nickname || (populatedMessage.sender as any).email;
+                    const notificationPayload = {
+                        notification: {
+                            title: conversation.isGroup ? `Group: ${conversation.groupName}` : senderName,
+                            body: data.text,
+                            icon: '/assets/icons/icon-512x512.png',
+                            data: {
+                                url: `/chat/${data.conversationId}`,
+                                conversationId: data.conversationId
+                            }
+                        }
+                    };
+
+                    conversation.participants.forEach(participantId => {
+                        const pId = participantId.toString();
+                        if (pId !== userId) {
+                            // We send to all participants. PushService.sendToUser handles checking for subscriptions.
+                            PushService.sendToUser(pId, notificationPayload);
+                        }
+                    });
+                }
             } catch (error) {
-                console.error('Error saving message', error);
+                console.error('Error saving message or sending push', error);
             }
         });
 
