@@ -7,6 +7,7 @@ import { UserService, UserProfile } from '../../core/services/user.service';
 import { ChatService, Conversation } from '../../core/services/chat.service';
 import { SocketService } from '../../core/services/socket.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { CreateGroupModal } from '../chat/create-group-modal/create-group-modal.component';
 import { Subscription } from 'rxjs';
 import { HostListener } from '@angular/core';
@@ -38,6 +39,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private chatService: ChatService,
     public socketService: SocketService,
     public notificationService: NotificationService,
+    public themeService: ThemeService,
     private router: Router
   ) {
     this.currentUser = this.authService.currentUser;
@@ -65,8 +67,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  @HostListener('document:click', ['$event'])
-  @HostListener('document:keydown', ['$event'])
+  @HostListener('document:click')
+  @HostListener('document:keydown')
   onUserInteraction() {
     this.notificationService.unlockAudio();
   }
