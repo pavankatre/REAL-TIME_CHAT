@@ -3,7 +3,6 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideZonelessChangeDetection } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
@@ -11,7 +10,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptors([jwtInterceptor])),
-    provideAnimationsAsync(),
     provideZonelessChangeDetection()
   ]
 };

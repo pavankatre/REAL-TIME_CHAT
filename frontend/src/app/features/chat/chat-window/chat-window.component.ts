@@ -16,7 +16,7 @@ import { GroupSettingsModal } from '../group-settings-modal/group-settings-modal
 @Component({
     selector: 'app-chat-window',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, MessageBubbleComponent, MatIconModule, MatButtonModule, MatInputModule, MatProgressSpinnerModule, MatDialogModule],
+    imports: [CommonModule, FormsModule, RouterLink, MessageBubbleComponent],
     templateUrl: './chat-window.component.html',
     styleUrl: './chat-window.component.css'
 })

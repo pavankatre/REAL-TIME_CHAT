@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
     selector: 'app-otp',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, MatCardModule, MatInputModule, MatButtonModule, MatFormFieldModule],
+    imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './otp.component.html',
     styleUrl: './otp.component.css'
 })

@@ -12,7 +12,7 @@ import { UserProfile, UserService } from '../../../core/services/user.service';
 @Component({
   selector: 'app-group-settings-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule, MatButtonModule, MatInputModule, MatIconModule, MatListModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './group-settings-modal.component.html',
   styleUrl: './group-settings-modal.component.css'
 })

@@ -12,7 +12,7 @@ import { UserProfile } from '../../../core/services/user.service';
 @Component({
   selector: 'app-create-group-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule, MatButtonModule, MatInputModule, MatIconModule, MatChipsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './create-group-modal.component.html',
   styleUrl: './create-group-modal.component.css'
 })
