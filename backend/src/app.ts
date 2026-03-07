@@ -42,6 +42,7 @@ app.use(cookieParser());
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
 import chatRoutes from './routes/chat.routes';
+import pushRoutes from './routes/push.routes';
 
 // Main Routes Placeholder
 app.get('/', (req, res) => {
@@ -52,6 +53,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/push', pushRoutes);
 
 // Error Handling
 app.use(notFound);

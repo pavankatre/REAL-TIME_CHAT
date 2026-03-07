@@ -20,6 +20,13 @@ export interface IUser extends Document {
     gender?: 'male' | 'female' | 'other' | 'prefer-not-to-say';
     status: 'online' | 'offline' | 'busy';
     lastSeen: Date;
+    pushSubscriptions: Array<{
+        endpoint: string;
+        keys: {
+            p256dh: string;
+            auth: string;
+        };
+    }>;
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -95,7 +102,16 @@ const userSchema = new Schema<IUser>(
         lastSeen: {
             type: Date,
             default: Date.now,
-        }
+        },
+        pushSubscriptions: [
+            {
+                endpoint: String,
+                keys: {
+                    p256dh: String,
+                    auth: String
+                }
+            }
+        ]
     },
     {
         timestamps: true,
