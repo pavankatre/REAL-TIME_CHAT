@@ -71,9 +71,8 @@
         </div>
     </div>
 
-    <!-- Actions -->
     <div class="mt-10 flex gap-3">
-        <button (click)="dialogRef.close()"
+        <button (click)="close.emit()"
             class="flex-1 px-4 py-3 text-sm font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all active:scale-95">
             Cancel
         </button>
