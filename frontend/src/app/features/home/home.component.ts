@@ -11,6 +11,7 @@ import { ThemeService } from '../../core/services/theme.service';
 import { CreateGroupModal } from '../chat/create-group-modal/create-group-modal.component';
 import { Subscription } from 'rxjs';
 import { HostListener } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   searchResults = signal<UserProfile[]>([]);
   isLoading = signal(true);
   isSearching = signal(false);
+  version = environment.version;
 
   currentUser: Signal<any>;
   searchQuery = '';

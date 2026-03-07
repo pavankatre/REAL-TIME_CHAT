@@ -188,7 +188,7 @@
                             class="group px-6 py-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all active:bg-slate-100 dark:active:bg-slate-800">
                             <div class="flex items-center gap-4">
                                 <div class="relative flex-shrink-0">
-                                    <img [src]="user.avatarUrl || 'https://via.placeholder.com/40'"
+                                    <img [src]="user.avatarUrl || '/assets/default-avatar.svg'"
                                         class="w-12 h-12 rounded-full object-cover ring-2 ring-white dark:ring-slate-900 shadow-sm border border-slate-200 dark:border-slate-800">
                                     <span *ngIf="isUserOnline(user._id)"
                                         class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900"></span>
@@ -235,7 +235,7 @@
                             </div>
 
                             <div class="relative flex-shrink-0" *ngIf="!convo.isGroup">
-                                <img [src]="getOtherParticipant(convo)?.avatarUrl || 'https://via.placeholder.com/56'"
+                                <img [src]="getOtherParticipant(convo)?.avatarUrl || '/assets/default-avatar.svg'"
                                     class="w-14 h-14 rounded-full object-cover shadow-sm ring-2 ring-white dark:ring-slate-900 border border-slate-200 dark:border-slate-800">
                                 <span *ngIf="isUserOnline(getOtherParticipant(convo)?._id || '')"
                                     class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 shadow-sm"></span>
@@ -306,6 +306,14 @@
             </div>
         </div>
     </main>
+
+    <!-- Version Display -->
+    <div class="fixed bottom-4 left-4 z-50">
+        <span
+            class="px-2 py-1 bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-sm rounded-md text-[10px] font-bold text-slate-500 dark:text-slate-400 border border-slate-300/30 dark:border-slate-700/30">
+            v{{ version }}
+        </span>
+    </div>
 </div>
 
 <!-- Modals -->

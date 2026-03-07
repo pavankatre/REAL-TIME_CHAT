@@ -8,6 +8,7 @@ import { SocketService } from '../../../core/services/socket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { MessageBubbleComponent } from '../message-bubble/message-bubble.component';
 import { GroupSettingsModal } from '../group-settings-modal/group-settings-modal.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-chat-window',
@@ -39,6 +40,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     typingTimeout: any;
 
     isSettingsOpen = signal(false);
+    version = environment.version;
     private messageSubscription?: Subscription;
 
     constructor(
