@@ -1,0 +1,17 @@
+{
+    "name": "Real-Time Chat",
+    "short_name": "RTChat",
+    "theme_color": "#4f46e5",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "assets/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable any"
+        }
+    ]
+}

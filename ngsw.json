@@ -1,0 +1,93 @@
+{
+  "configVersion": 1,
+  "timestamp": 1772906508608,
+  "index": "/REAL-TIME_CHAT/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/REAL-TIME_CHAT/chunk-2IZUZDUR.js",
+        "/REAL-TIME_CHAT/chunk-3FMCLIFB.js",
+        "/REAL-TIME_CHAT/chunk-5JPTK3NL.js",
+        "/REAL-TIME_CHAT/chunk-6JHIWEBV.js",
+        "/REAL-TIME_CHAT/chunk-HQCA5TAB.js",
+        "/REAL-TIME_CHAT/chunk-INU5H3YA.js",
+        "/REAL-TIME_CHAT/chunk-NGAHK7YQ.js",
+        "/REAL-TIME_CHAT/chunk-PCNRK6YS.js",
+        "/REAL-TIME_CHAT/chunk-RSC4KTXT.js",
+        "/REAL-TIME_CHAT/chunk-SDNMGFZ5.js",
+        "/REAL-TIME_CHAT/chunk-T5BM3VYL.js",
+        "/REAL-TIME_CHAT/chunk-TACCQ3AC.js",
+        "/REAL-TIME_CHAT/chunk-VRMQBXAD.js",
+        "/REAL-TIME_CHAT/chunk-Y66RS6N6.js",
+        "/REAL-TIME_CHAT/favicon.ico",
+        "/REAL-TIME_CHAT/index.html",
+        "/REAL-TIME_CHAT/main-JFETTX5F.js",
+        "/REAL-TIME_CHAT/manifest.webmanifest",
+        "/REAL-TIME_CHAT/styles-IPNW6NPH.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/REAL-TIME_CHAT/assets/default-avatar.svg",
+        "/REAL-TIME_CHAT/assets/icons/icon-512x512.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/REAL-TIME_CHAT/assets/default-avatar.svg": "7cb52be181303e5c9e9d007c9a47e15babd268ac",
+    "/REAL-TIME_CHAT/assets/icons/icon-512x512.png": "5dd965eadfeb901ffbd4d656c3a33fae1efbc5e9",
+    "/REAL-TIME_CHAT/chunk-2IZUZDUR.js": "a9f12a5afd93c1751522a332d747bd89ca1ce8b0",
+    "/REAL-TIME_CHAT/chunk-3FMCLIFB.js": "a068046be9a5084c41cd503d5e0aab0a0d0a4b1d",
+    "/REAL-TIME_CHAT/chunk-5JPTK3NL.js": "d7ee027fe8ab608ef654e33cdca5633a604ddf5d",
+    "/REAL-TIME_CHAT/chunk-6JHIWEBV.js": "aafe09dd32aa7ea42df3ea990b92d2c876a2b337",
+    "/REAL-TIME_CHAT/chunk-HQCA5TAB.js": "74bb012d047aa64718d10043b6551332d49eb124",
+    "/REAL-TIME_CHAT/chunk-INU5H3YA.js": "8b7b7f63f07277a36fe4b54d9f1d440a204a7ed0",
+    "/REAL-TIME_CHAT/chunk-NGAHK7YQ.js": "fe50d71089612667d168a27b3a75c0684edda825",
+    "/REAL-TIME_CHAT/chunk-PCNRK6YS.js": "1c209eb27749ccc345f1ff9432c321b77047fb76",
+    "/REAL-TIME_CHAT/chunk-RSC4KTXT.js": "66f1f9e0fd599ff155d5f7835be6280143e6e671",
+    "/REAL-TIME_CHAT/chunk-SDNMGFZ5.js": "e8c5756eb2fcd13463aeff1db829df82656f5cd4",
+    "/REAL-TIME_CHAT/chunk-T5BM3VYL.js": "99b37f3b4543fd388ce0d5fb55ec7c4238b9f57a",
+    "/REAL-TIME_CHAT/chunk-TACCQ3AC.js": "8ca9253893cc5a635ec546f89d9d7810e2af99e0",
+    "/REAL-TIME_CHAT/chunk-VRMQBXAD.js": "f058ca2463a94b0de5a9db4d67f2fb1d92c86cad",
+    "/REAL-TIME_CHAT/chunk-Y66RS6N6.js": "40e6e25e652c96f2003c863eecfca4030ffdb42d",
+    "/REAL-TIME_CHAT/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "/REAL-TIME_CHAT/index.html": "209d5581bc71af08dcc90febddf0f2f3162664c7",
+    "/REAL-TIME_CHAT/main-JFETTX5F.js": "d9b368e9c9b37d34bd46a9613711c0f82b4d31ba",
+    "/REAL-TIME_CHAT/manifest.webmanifest": "f045e9fd270e9dd3dbbb2aeb8e5e57b2522f204a",
+    "/REAL-TIME_CHAT/styles-IPNW6NPH.css": "940d7287b97b410f7a12b1a8740da680409a0ece"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
