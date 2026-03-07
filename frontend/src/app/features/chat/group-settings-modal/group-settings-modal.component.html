@@ -84,7 +84,7 @@
                 class="p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer flex items-center justify-between"
                 (click)="addParticipant(user)">
                 <div class="flex items-center gap-3">
-                    <img [src]="user.avatarUrl || 'https://via.placeholder.com/30'"
+                    <img [src]="user.avatarUrl || '/assets/default-avatar.svg'"
                         class="w-8 h-8 rounded-full object-cover shadow-sm">
                     <span class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ user.email }}</span>
                 </div>
@@ -108,7 +108,7 @@
                 class="group flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                 <div class="flex items-center gap-3">
                     <div class="relative">
-                        <img [src]="p.avatarUrl || 'https://via.placeholder.com/35'"
+                        <img [src]="p.avatarUrl || '/assets/default-avatar.svg'"
                             class="w-10 h-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-800 shadow-sm">
                         <span *ngIf="p._id === data.admin"
                             class="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 rounded-full border-2 border-white dark:border-slate-800 flex items-center justify-center"

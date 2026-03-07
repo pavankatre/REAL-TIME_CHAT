@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment';
 
 export interface User {
@@ -17,6 +18,7 @@ export interface User {
 export class AuthService {
     private apiUrl = environment.apiUrl + '/auth';
     public isAuthenticated = signal<boolean>(this.hasToken());
+    public isLoggedIn$ = toObservable(this.isAuthenticated);
     public currentUser = signal<User | null>(this.getUserFromStorage());
 
     constructor(private http: HttpClient, private router: Router) { }

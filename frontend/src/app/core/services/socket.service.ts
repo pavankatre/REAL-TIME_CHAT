@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
+import { Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 
@@ -9,6 +10,10 @@ import { AuthService } from './auth.service';
 export class SocketService {
     private socket: Socket | null = null;
     public onlineUsers = signal<Map<string, string>>(new Map());
+
+    // Use Subject for multiple listeners (Notifications + Active Chat)
+    private newMessageSubject = new Subject<any>();
+    public newMessage$ = this.newMessageSubject.asObservable();
 
     constructor(private authService: AuthService) { }
 
@@ -41,15 +46,11 @@ export class SocketService {
 
         // Chat Event Listeners
         this.socket.on('new_message', (message: any) => {
-            // We will emit this through a Subject or directly update the ChatService signal locally
-            // using an event bus pattern. For simplicity, we can do it later in the components
-            // or inject ChatService here (avoiding circular dependency).
             console.log('New message received:', message);
-            this.emitMessageUpdate(message);
+            this.newMessageSubject.next(message);
         });
 
         this.socket.on('user_typing', (data: { userId: string, user?: { email: string, avatarUrl: string }, conversationId: string }) => {
-            // Emitted for typing indicator
             this.emitTypingStatus(data, true);
         });
 
@@ -98,12 +99,7 @@ export class SocketService {
         }
     }
 
-    // --- Simple local Event Bus callbacks for components to hook into without circular dependencies ---
-
-    public onNewMessageCallback: ((message: any) => void) | null = null;
-    private emitMessageUpdate(message: any) {
-        if (this.onNewMessageCallback) this.onNewMessageCallback(message);
-    }
+    // --- Simple local Event Bus callbacks ---
 
     public onTypingStatusCallback: ((data: { userId: string, user?: { email: string, avatarUrl: string }, conversationId: string }, isTyping: boolean) => void) | null = null;
     private emitTypingStatus(data: { userId: string, user?: { email: string, avatarUrl: string }, conversationId: string }, isTyping: boolean) {
