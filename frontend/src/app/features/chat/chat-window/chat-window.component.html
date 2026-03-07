@@ -129,3 +129,7 @@
         </form>
     </footer>
 </div>
+
+<!-- Modals -->
+<app-group-settings-modal *ngIf="isSettingsOpen()" [data]="activeConversation()!" (close)="isSettingsOpen.set(false)">
+</app-group-settings-modal>
