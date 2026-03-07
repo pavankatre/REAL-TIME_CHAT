@@ -1,53 +1,87 @@
-<h2 mat-dialog-title>Create New Group</h2>
-<mat-dialog-content class="w-full max-w-md pt-4">
-
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Group Name</label>
-        <input type="text" [(ngModel)]="groupName" placeholder="E.g. Engineering Team"
-            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none">
+<div class="p-6 bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full animate-fade-in transition-colors duration-300">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Create New Group</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Start a conversation with multiple people</p>
     </div>
 
-    <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Search Participants</label>
-        <div class="relative">
-            <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearch()" placeholder="Search users..."
-                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none pl-10">
-            <mat-icon class="absolute left-3 top-2.5 text-gray-400">search</mat-icon>
+    <div class="space-y-5">
+        <!-- Group Name -->
+        <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Group Name</label>
+            <input type="text" [(ngModel)]="groupName" placeholder="E.g. Engineering Team"
+                class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all dark:text-white">
         </div>
 
-        <!-- Search Results -->
-        <div *ngIf="searchResults().length > 0" class="mt-2 border rounded-md max-h-40 overflow-y-auto">
-            <div *ngFor="let user of searchResults()"
-                class="p-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between"
-                (click)="toggleSelection(user)">
-                <div class="flex items-center space-x-2">
-                    <img [src]="user.avatarUrl || 'https://via.placeholder.com/30'"
-                        class="w-6 h-6 rounded-full object-cover bg-gray-200">
-                    <span class="text-sm font-medium">{{ user.email }}</span>
+        <!-- Participant Search -->
+        <div class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Add Participants</label>
+            <div class="relative group">
+                <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearch()"
+                    placeholder="Search by email..."
+                    class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all pl-11 dark:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-primary-500 transition-colors"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+
+            <!-- Search Results Dropdown -->
+            <div *ngIf="searchResults().length > 0"
+                class="mt-2 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-xl max-h-48 overflow-y-auto custom-scrollbar animate-fade-in divide-y divide-slate-100 dark:divide-slate-700/50">
+                <div *ngFor="let user of searchResults()"
+                    class="p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer flex items-center justify-between transition-colors"
+                    (click)="toggleSelection(user)">
+                    <div class="flex items-center gap-3">
+                        <img [src]="user.avatarUrl || 'https://via.placeholder.com/30'"
+                            class="w-8 h-8 rounded-full object-cover ring-2 ring-white dark:ring-slate-700 shadow-sm">
+                        <span class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ user.email }}</span>
+                    </div>
+                    <div *ngIf="isSelected(user)" class="text-emerald-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
                 </div>
-                <mat-icon *ngIf="isSelected(user)" class="text-brand-green text-sm">check_circle</mat-icon>
+            </div>
+        </div>
+
+        <!-- Selected Tags -->
+        <div *ngIf="selectedUsers().length > 0" class="space-y-2">
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Selected members ({{
+                selectedUsers().length }})</label>
+            <div class="flex flex-wrap gap-2 p-1">
+                <div *ngFor="let user of selectedUsers()"
+                    class="flex items-center gap-1.5 pl-2 pr-1 py-1 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 rounded-lg text-xs font-bold border border-primary-100 dark:border-primary-800/50 animate-fade-in">
+                    <span>{{ user.email.split('@')[0] }}</span>
+                    <button (click)="toggleSelection(user)"
+                        class="p-0.5 hover:bg-primary-200 dark:hover:bg-primary-800 rounded-md transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Selected Chips -->
-    <div *ngIf="selectedUsers().length > 0" class="mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Selected ({{ selectedUsers().length }})</label>
-        <mat-chip-set>
-            <mat-chip *ngFor="let user of selectedUsers()" (removed)="toggleSelection(user)">
-                {{ user.email.split('@')[0] }}
-                <button matChipRemove>
-                    <mat-icon>cancel</mat-icon>
-                </button>
-            </mat-chip>
-        </mat-chip-set>
+    <!-- Actions -->
+    <div class="mt-10 flex gap-3">
+        <button (click)="dialogRef.close()"
+            class="flex-1 px-4 py-3 text-sm font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all active:scale-95">
+            Cancel
+        </button>
+        <button [disabled]="selectedUsers().length === 0 || !groupName.trim() || isLoading()" (click)="createGroup()"
+            class="flex-[2] px-4 py-3 text-sm font-bold text-white bg-primary-600 hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl shadow-lg shadow-primary-600/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+            <span *ngIf="!isLoading()">Create Group</span>
+            <div *ngIf="isLoading()" class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin">
+            </div>
+        </button>
     </div>
-
-</mat-dialog-content>
-<mat-dialog-actions align="end" class="pb-4 pr-4">
-    <button mat-button (click)="dialogRef.close()">Cancel</button>
-    <button mat-flat-button color="primary"
-        [disabled]="selectedUsers().length === 0 || !groupName.trim() || isLoading()" (click)="createGroup()">
-        Create
-    </button>
-</mat-dialog-actions>
+</div>

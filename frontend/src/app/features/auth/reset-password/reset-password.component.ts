@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, MatCardModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css'
 })

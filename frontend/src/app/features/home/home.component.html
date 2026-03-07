@@ -1,156 +1,215 @@
-<div class="h-screen bg-gray-100 flex flex-col">
-    <mat-toolbar color="primary" class="shadow-md flex justify-between z-10">
-        <span class="font-bold flex items-center space-x-2"> <span>Real-Time Chat</span></span>
-        <div>
-            <button mat-button routerLink="/profile"> Profile</button>
-            <button mat-button (click)="logout()"> Logout</button>
+<div class="h-screen bg-slate-50 dark:bg-slate-950 flex flex-col transition-colors duration-300">
+    <!-- Main Header -->
+    <header
+        class="glass sticky top-0 z-20 px-6 py-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800/50">
+        <div class="flex items-center gap-2">
+            <div
+                class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center shadow-lg shadow-primary-600/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+            </div>
+            <h1
+                class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-400">
+                Real-Time Chat
+            </h1>
         </div>
-    </mat-toolbar>
 
-    <main class="flex-1 overflow-hidden flex justify-center py-4 px-2 sm:py-6 sm:px-4">
-        <mat-card class="w-full max-w-4xl rounded-2xl shadow-xl flex flex-col h-full bg-white border-0 overflow-hidden">
-            <mat-card-header class="border-b bg-white px-4 py-3 sm:px-6 sm:py-5 flex-shrink-0">
-                <div class="flex items-center justify-between w-full">
-                    <mat-card-title
-                        class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-indigo-400 bg-clip-text text-transparent">
-                        Conversations
-                    </mat-card-title>
-                    <div class="flex items-center space-x-2 sm:space-x-4">
+        <div class="flex items-center gap-2">
+            <button routerLink="/profile"
+                class="px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                Profile
+            </button>
+            <button (click)="logout()"
+                class="px-4 py-2 text-sm font-bold text-red-500 hover:text-red-600 transition-colors">
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-hidden flex justify-center py-4 px-2 sm:py-8 sm:px-6">
+        <div
+            class="w-full max-w-4xl glass rounded-3xl shadow-2xl flex flex-col h-full overflow-hidden border border-slate-200 dark:border-slate-800/50">
+            <!-- Card Header -->
+            <div
+                class="px-6 py-6 border-b border-slate-200 dark:border-slate-800/50 bg-white/50 dark:bg-slate-900/50 flex-shrink-0">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Conversations</h2>
+
+                    <div class="flex items-center gap-4">
                         <span
-                            class="text-xs sm:text-sm font-medium text-gray-400 hidden md:inline-block px-3 py-1 bg-gray-50 rounded-full border border-gray-100">
+                            class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-lg text-xs font-bold border border-slate-200 dark:border-slate-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                             {{ currentUser()?.email }}
                         </span>
-                        <button mat-flat-button color="primary"
-                            class="rounded-full !px-3 sm:!px-4 !h-9 sm:!h-10 transition-all hover:scale-105 active:scale-95 shadow-md shadow-indigo-100"
-                            (click)="openCreateGroup()">
-                            <span class="text-sm">New Group</span>
+
+                        <button (click)="openCreateGroup()"
+                            class="px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white text-sm font-bold rounded-xl shadow-lg shadow-primary-600/20 transition-all active:scale-95 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            New Group
                         </button>
                     </div>
                 </div>
-            </mat-card-header>
 
-            <mat-card-content class="flex-1 overflow-hidden p-0 m-0 flex flex-col">
-                <!-- Search Bar Container -->
-                <div class="p-4 border-b bg-gray-50/30 flex-shrink-0">
-                    <mat-form-field appearance="outline" class="w-full hide-subscript">
-                        <mat-label>Search people or email</mat-label>
-                        <input matInput type="text" [(ngModel)]="searchQuery" (input)="onSearch()"
-                            placeholder="Type to search...">
-                        <button mat-icon-button matSuffix *ngIf="searchQuery" (click)="clearSearch()" class="scale-90">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </mat-form-field>
+                <!-- Search Input -->
+                <div class="mt-6 relative group">
+                    <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()"
+                        placeholder="Search people or email..."
+                        class="w-full px-5 py-3.5 bg-slate-100 dark:bg-slate-800 border-none rounded-2xl focus:ring-2 focus:ring-primary-500/20 outline-none transition-all pl-12 dark:text-white placeholder-slate-400 dark:placeholder-slate-500">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-primary-500 transition-colors"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <button *ngIf="searchQuery" (click)="clearSearch()"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
+            </div>
 
-                <!-- Scrollable List Area -->
-                <div class="flex-1 overflow-y-auto">
-                    <!-- Search Results View -->
-                    <mat-list *ngIf="isSearching()" class="p-0">
-                        <h3 matSubheader
-                            class="text-indigo-600 font-semibold px-6 pt-4 pb-2 bg-white sticky top-0 z-10 text-xs tracking-wider uppercase">
+            <!-- List Area -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
+                <!-- Search Results -->
+                <div *ngIf="isSearching()" class="animate-fade-in">
+                    <div class="px-6 py-3 bg-slate-50/50 dark:bg-slate-800/20 sticky top-0 z-10">
+                        <h3
+                            class="text-[10px] font-bold text-primary-600 dark:text-primary-400 uppercase tracking-widest">
                             Search Results</h3>
-                        <mat-list-item *ngFor="let user of searchResults()"
-                            class="!h-auto border-b border-gray-50 last:border-0 hover:bg-gray-50/80 cursor-pointer transition-colors"
-                            (click)="startChat(user._id)">
-                            <div class="flex items-center space-x-4 w-full py-4 px-6">
-                                <div class="relative shrink-0">
+                    </div>
+
+                    <div class="divide-y divide-slate-100 dark:divide-slate-800/50">
+                        <div *ngFor="let user of searchResults()" (click)="startChat(user._id)"
+                            class="group px-6 py-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all active:bg-slate-100 dark:active:bg-slate-800">
+                            <div class="flex items-center gap-4">
+                                <div class="relative flex-shrink-0">
                                     <img [src]="user.avatarUrl || 'https://via.placeholder.com/40'"
-                                        class="w-12 h-12 rounded-full object-cover bg-gray-200 ring-2 ring-white shadow-sm"
-                                        alt="User avatar">
+                                        class="w-12 h-12 rounded-full object-cover ring-2 ring-white dark:ring-slate-900 shadow-sm border border-slate-200 dark:border-slate-800">
                                     <span *ngIf="isUserOnline(user._id)"
-                                        class="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full ring-2 ring-white bg-green-400 shadow-sm"></span>
+                                        class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900"></span>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="font-semibold text-gray-900 text-base leading-tight">{{ user.email }}
-                                    </h3>
-                                    <p class="text-sm text-gray-500 truncate mt-0.5 leading-relaxed">{{ user.bio ||
+                                <div class="min-w-0">
+                                    <h4 class="font-bold text-slate-800 dark:text-white truncate">{{ user.email }}</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{{ user.bio ||
                                         'Available' }}</p>
                                 </div>
-                                <mat-icon
-                                    class="text-gray-300 scale-75 opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</mat-icon>
                             </div>
-                        </mat-list-item>
-                        <div *ngIf="searchResults().length === 0" class="text-center py-16 text-gray-500">
-                            <mat-icon class="text-5xl mb-3 text-gray-200 h-12 w-12">person_search</mat-icon>
-                            <p class="text-base font-medium">No users found</p>
-                            <p class="text-sm text-gray-400 mt-1">Try a different search term</p>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 text-slate-300 group-hover:text-primary-500 transition-all group-hover:translate-x-1"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
                         </div>
-                    </mat-list>
+                    </div>
 
-                    <!-- Conversations View -->
-                    <mat-list *ngIf="!isSearching()" class="p-0">
-                        <mat-list-item *ngFor="let convo of conversations()"
-                            class="!h-auto border-b border-gray-50 last:border-0 hover:bg-indigo-50/30 cursor-pointer transition-all duration-200"
-                            (click)="openConversation(convo._id)">
-                            <div class="flex items-center space-x-4 w-full py-4 px-6">
-                                <!-- Group Avatar -->
-                                <div class="relative shrink-0" *ngIf="convo.isGroup">
-                                    <div
-                                        class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-100 ring-2 ring-white">
-                                        {{ convo.groupName?.charAt(0) || 'G' }}
-                                    </div>
-                                </div>
-
-                                <!-- Direct Chat Avatar -->
-                                <div class="relative shrink-0" *ngIf="!convo.isGroup">
-                                    <img [src]="getOtherParticipant(convo)?.avatarUrl || 'https://via.placeholder.com/56'"
-                                        class="w-14 h-14 rounded-full object-cover bg-gray-200 ring-4 ring-white shadow-sm"
-                                        alt="User avatar">
-                                    <span *ngIf="isUserOnline(getOtherParticipant(convo)?._id || '')"
-                                        class="absolute bottom-1 right-1 w-4 h-4 rounded-full ring-2 ring-white bg-green-400 shadow-sm"></span>
-                                </div>
-
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex justify-between items-center mb-1">
-                                        <h3 class="font-bold text-gray-900 text-base leading-tight truncate pr-2">
-                                            {{ convo.isGroup ? convo.groupName : (getOtherParticipant(convo)?.nickname
-                                            || getOtherParticipant(convo)?.email || 'Chat').split('@')[0] }}
-                                        </h3>
-                                        <span class="text-xs font-medium text-gray-400 bg-gray-50 px-2 py-0.5 rounded"
-                                            *ngIf="convo.lastMessage">
-                                            {{ convo.lastMessage.createdAt | date:'shortTime' }}
-                                        </span>
-                                    </div>
-                                    <div class="flex items-center text-sm">
-                                        <p class="text-gray-500 truncate mt-0.5 leading-snug">
-                                            <span *ngIf="convo.lastMessage?.sender === currentUser()?._id"
-                                                class="font-semibold text-indigo-500 mr-1">You:</span>
-                                            {{ convo.lastMessage?.text || (convo.isGroup ? 'Group Created' : 'New
-                                            Conversation') }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Delete Conversation Button -->
-                                <div
-                                    class="shrink-0 flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button mat-icon-button color="warn" class="scale-90"
-                                        (click)="deleteConversation($event, convo._id)" matTooltip="Delete Chat">
-                                        <mat-icon>delete_outline</mat-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </mat-list-item>
-
-                        <!-- Empty State -->
-                        <div *ngIf="conversations().length === 0 && !isLoading()"
-                            class="text-center py-20 text-gray-500 flex flex-col items-center px-8">
-                            <div class="bg-indigo-50 p-6 rounded-full mb-6">
-                                <mat-icon class="text-6xl text-indigo-300 h-16 w-16">forum</mat-icon>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800 mb-2">Start a conversation</h3>
-                            <p class="text-gray-500 max-w-sm">Search for users above to begin your first chat or create
-                                a group with your friends.</p>
-                        </div>
-
-                        <!-- Loading State -->
-                        <div *ngIf="isLoading()" class="py-20 flex flex-col items-center">
-                            <mat-spinner diameter="40" strokeWidth="3"></mat-spinner>
-                            <p class="mt-4 text-gray-400 text-sm font-medium">Fetching your chats...</p>
-                        </div>
-                    </mat-list>
+                    <!-- Search Empty State -->
+                    <div *ngIf="searchResults().length === 0"
+                        class="flex flex-col items-center justify-center py-20 opacity-40">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-slate-300 mb-4" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <p class="text-lg font-bold">No users found</p>
+                        <p class="text-sm">Try searching for another email</p>
+                    </div>
                 </div>
-            </mat-card-content>
-        </mat-card>
+
+                <!-- Conversations -->
+                <div *ngIf="!isSearching()" class="animate-fade-in divide-y divide-slate-100 dark:divide-slate-800/50">
+                    <div *ngFor="let convo of conversations()" (click)="openConversation(convo._id)"
+                        class="group px-6 py-5 flex items-center justify-between hover:bg-primary-50/30 dark:hover:bg-primary-900/5 cursor-pointer transition-all active:bg-primary-50 dark:active:bg-primary-900/10">
+                        <div class="flex items-center gap-4 w-full min-w-0">
+                            <!-- Avatar -->
+                            <div class="relative flex-shrink-0" *ngIf="convo.isGroup">
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-primary-500/10 ring-2 ring-white dark:ring-slate-900">
+                                    {{ convo.groupName?.charAt(0) || 'G' }}
+                                </div>
+                            </div>
+
+                            <div class="relative flex-shrink-0" *ngIf="!convo.isGroup">
+                                <img [src]="getOtherParticipant(convo)?.avatarUrl || 'https://via.placeholder.com/56'"
+                                    class="w-14 h-14 rounded-full object-cover shadow-sm ring-2 ring-white dark:ring-slate-900 border border-slate-200 dark:border-slate-800">
+                                <span *ngIf="isUserOnline(getOtherParticipant(convo)?._id || '')"
+                                    class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 shadow-sm"></span>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="flex-1 min-w-0 pr-4">
+                                <div class="flex justify-between items-center mb-1.5">
+                                    <h4 class="font-bold text-slate-800 dark:text-white truncate">
+                                        {{ convo.isGroup ? convo.groupName : (getOtherParticipant(convo)?.nickname ||
+                                        getOtherParticipant(convo)?.email || 'Chat').split('@')[0] }}
+                                    </h4>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase"
+                                        *ngIf="convo.lastMessage">
+                                        {{ convo.lastMessage.createdAt | date:'shortTime' }}
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 truncate leading-relaxed">
+                                        <span *ngIf="convo.lastMessage?.sender === currentUser()?._id"
+                                            class="text-primary-600 dark:text-primary-400 font-bold mr-1">You:</span>
+                                        {{ convo.lastMessage?.text || (convo.isGroup ? 'Group Created' : 'New
+                                        Conversation') }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex items-center gap-1">
+                                <button (click)="deleteConversation($event, convo._id)"
+                                    class="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all opacity-0 group-hover:opacity-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conversations Empty State -->
+                    <div *ngIf="conversations().length === 0 && !isLoading()"
+                        class="flex flex-col items-center justify-center py-24 opacity-60">
+                        <div
+                            class="w-20 h-20 bg-primary-50 dark:bg-primary-900/10 rounded-full flex items-center justify-center mb-6 border border-primary-100 dark:border-primary-800/30">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary-500" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold dark:text-white mb-2">Start a conversation</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm max-w-[280px] text-center">Search for users
+                            or create a new group to get started</p>
+                    </div>
+
+                    <!-- Loader -->
+                    <div *ngIf="isLoading()"
+                        class="py-24 flex flex-col items-center justify-center gap-4 grayscale opacity-50">
+                        <div
+                            class="w-8 h-8 border-3 border-primary-500/20 border-t-primary-500 rounded-full animate-spin">
+                        </div>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest animate-pulse">Fetching
+                            conversations...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </div>

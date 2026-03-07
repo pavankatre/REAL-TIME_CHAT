@@ -1,74 +1,138 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <mat-card class="max-w-md w-full space-y-8 p-8 rounded-xl shadow-lg">
-        <div class="text-center">
-            <h2 class="mt-4 text-3xl font-extrabold text-gray-900">Create an Account</h2>
-            <p class="mt-2 text-sm text-gray-600">Join us to get started</p>
+<div
+    class="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <div class="max-w-md w-full glass p-8 rounded-2xl animate-fade-in text-slate-900 dark:text-white">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold tracking-tight">Create an Account</h2>
+            <p class="mt-3 text-slate-500 dark:text-slate-400">Join us to get started</p>
         </div>
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Email address</mat-label>
-                <input matInput formControlName="email" type="email" placeholder="Email address" required>
-                <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Email is required</mat-error>
-                <mat-error *ngIf="registerForm.get('email')?.hasError('email')">Please enter a valid email</mat-error>
-            </mat-form-field>
 
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Nickname</mat-label>
-                <input matInput formControlName="nickname" placeholder="Nickname" required>
-                <mat-error *ngIf="registerForm.get('nickname')?.hasError('required')">Nickname is required</mat-error>
-            </mat-form-field>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+            <!-- Email Field -->
+            <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Email Address</label>
+                <input formControlName="email" type="email" placeholder="name@example.com"
+                    class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                <div class="ml-1 h-4">
+                    <p *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')"
+                        class="text-[10px] text-red-500">Email is required</p>
+                    <p *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')"
+                        class="text-[10px] text-red-500">Please enter a valid email</p>
+                </div>
+            </div>
 
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Gender</mat-label>
-                <mat-select formControlName="gender" required>
-                    <mat-option value="male">Male</mat-option>
-                    <mat-option value="female">Female</mat-option>
-                    <mat-option value="other">Other</mat-option>
-                    <mat-option value="prefer-not-to-say">Prefer not to say</mat-option>
-                </mat-select>
-                <mat-error *ngIf="registerForm.get('gender')?.hasError('required')">Gender is required</mat-error>
-            </mat-form-field>
+            <!-- Nickname Field -->
+            <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Nickname</label>
+                <input formControlName="nickname" type="text" placeholder="Your nickname"
+                    class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                <div class="ml-1 h-4">
+                    <p *ngIf="registerForm.get('nickname')?.touched && registerForm.get('nickname')?.hasError('required')"
+                        class="text-[10px] text-red-500">Nickname is required</p>
+                </div>
+            </div>
 
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Password</mat-label>
-                <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'"
-                    placeholder="Password" required>
-                <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
-                    <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-                <mat-error *ngIf="registerForm.get('password')?.hasError('required')">Password is required</mat-error>
-                <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">Minimum 6 characters
-                    required</mat-error>
-            </mat-form-field>
+            <!-- Gender Field -->
+            <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Gender</label>
+                <div class="relative">
+                    <select formControlName="gender"
+                        class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all appearance-none cursor-pointer">
+                        <option value="" disabled selected>Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                    <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="ml-1 h-4">
+                    <p *ngIf="registerForm.get('gender')?.touched && registerForm.get('gender')?.hasError('required')"
+                        class="text-[10px] text-red-500">Gender is required</p>
+                </div>
+            </div>
 
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Confirm Password</mat-label>
-                <input matInput formControlName="confirmPassword" [type]="hidePassword() ? 'password' : 'text'"
-                    placeholder="Confirm Password" required>
-                <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">Please confirm your
-                    password</mat-error>
-                <mat-error
-                    *ngIf="registerForm.get('confirmPassword')?.hasError('mismatch') && !registerForm.get('confirmPassword')?.hasError('required')">
-                    Passwords do not match
-                </mat-error>
-            </mat-form-field>
+            <!-- Password Field -->
+            <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Password</label>
+                <div class="relative">
+                    <input formControlName="password" [type]="hidePassword() ? 'password' : 'text'"
+                        placeholder="••••••••"
+                        class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                    <button type="button" (click)="togglePasswordVisibility()"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 transition-colors">
+                        <svg *ngIf="hidePassword()" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <svg *ngIf="!hidePassword()" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.025 10.025 0 014.132-5.411m0 0L21 21m-2.101-2.101L17.5 17.5m-1.875-1.875L14 14M9 9l1.25 1.25M10.125 10.125L12 12m-2-2L9 9" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="ml-1 h-4">
+                    <p *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.hasError('required')"
+                        class="text-[10px] text-red-500">Password is required</p>
+                    <p *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.hasError('minlength')"
+                        class="text-[10px] text-red-500">Minimum 6 characters required</p>
+                </div>
+            </div>
 
-            <div *ngIf="errorMessage()" class="text-red-500 text-sm text-center">
+            <!-- Confirm Password Field -->
+            <div class="space-y-1.5">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 ml-1">Confirm
+                    Password</label>
+                <input formControlName="confirmPassword" [type]="hidePassword() ? 'password' : 'text'"
+                    placeholder="••••••••"
+                    class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all">
+                <div class="ml-1 h-4">
+                    <p *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.hasError('required')"
+                        class="text-[10px] text-red-500">Please confirm your password</p>
+                    <p *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.hasError('mismatch') && !registerForm.get('confirmPassword')?.hasError('required')"
+                        class="text-[10px] text-red-500">Passwords do not match</p>
+                </div>
+            </div>
+
+            <!-- Global Error -->
+            <div *ngIf="errorMessage()"
+                class="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-xs text-center animate-fade-in">
                 {{ errorMessage() }}
             </div>
 
-            <div>
-                <button mat-flat-button color="primary" type="submit" [disabled]="registerForm.invalid || isLoading()"
-                    class="w-full py-2 text-lg">
-                    <span *ngIf="!isLoading()">Register</span>
-                    <span *ngIf="isLoading()">Registering...</span>
-                </button>
-            </div>
+            <!-- Submit Button -->
+            <button type="submit" [disabled]="registerForm.invalid || isLoading()"
+                class="w-full h-11 flex items-center justify-center rounded-xl bg-primary-600 hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold transition-all shadow-lg active:scale-[0.98]">
+                <span *ngIf="!isLoading()">Register</span>
+                <span *ngIf="isLoading()" class="flex items-center gap-2 text-sm">
+                    <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    Registering...
+                </span>
+            </button>
 
-            <div class="text-center mt-4">
-                <a routerLink="/login" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">Already have an
-                    account? Sign in</a>
-            </div>
+            <!-- Login Link -->
+            <p class="text-center text-sm text-slate-500 dark:text-slate-400 pt-1">
+                Already have an account?
+                <a routerLink="/login"
+                    class="font-bold text-primary-600 dark:text-primary-400 hover:text-primary-500 transition-colors">
+                    Sign in
+                </a>
+            </p>
         </form>
-    </mat-card>
+    </div>
 </div>

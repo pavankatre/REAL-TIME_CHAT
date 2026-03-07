@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, MatCardModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -52,6 +52,13 @@ export class LoginComponent {
           this.errorMessage.set(err.error?.message || 'Login failed. Please check your credentials.');
         }
       });
+    }
+  }
+
+  onVerifyEmail() {
+    const email = this.loginForm.get('email')?.value;
+    if (email) {
+      this.router.navigate(['/otp'], { state: { email } });
     }
   }
 }
