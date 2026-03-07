@@ -1,35 +1,46 @@
-<div [ngClass]="isMine ? 'flex justify-end' : 'flex justify-start'" class="mb-4 w-full">
-    <div class="flex flex-col" [ngClass]="isMine ? 'items-end' : 'items-start'">
+<div [ngClass]="isMine ? 'flex justify-end' : 'flex justify-start'" class="mb-4 w-full px-2 animate-fade-in">
+    <div class="flex flex-col max-w-[85%] sm:max-w-[70%]" [ngClass]="isMine ? 'items-end' : 'items-start'">
         <!-- Sender Name for Groups -->
-        <span *ngIf="isGroup && !isMine" class="text-xs text-gray-500 mb-1 ml-2 font-medium">
+        <span *ngIf="isGroup && !isMine"
+            class="text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1 ml-3 tracking-wider uppercase">
             {{ message.sender.email.split('@')[0] }}
         </span>
 
-        <div class="max-w-[75%] px-4 py-2 rounded-2xl relative shadow-sm"
-            [ngClass]="isMine ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'">
+        <div class="px-4 py-2.5 rounded-2xl relative shadow-sm transition-colors duration-300"
+            [ngClass]="isMine ? 
+                'bg-primary-600 text-white rounded-tr-none shadow-primary-600/10' : 
+                'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none border border-slate-100 dark:border-slate-700/50 shadow-slate-200/50 dark:shadow-none'">
+
             <!-- Message Text -->
-            <p class="text-sm break-words">{{ message.text }}</p>
+            <p class="text-sm leading-relaxed break-words whitespace-pre-wrap">{{ message.text }}</p>
 
             <!-- Metadata / Receipts -->
-            <div class="flex items-center justify-end mt-1 space-x-1"
-                [ngClass]="isMine ? 'text-indigo-200' : 'text-gray-400'">
-                <span class="text-[10px] whitespace-nowrap">{{ message.createdAt | date:'shortTime' }}</span>
+            <div class="flex items-center justify-end mt-1.5 gap-1.5"
+                [ngClass]="isMine ? 'text-primary-100/70' : 'text-slate-400 dark:text-slate-500'">
+                <span class="text-[9px] font-medium whitespace-nowrap opacity-80 uppercase tracking-tighter">{{
+                    message.createdAt | date:'shortTime' }}</span>
 
                 <ng-container *ngIf="isMine">
-                    <!-- Default to Sent if status is missing -->
-                    <mat-icon *ngIf="!message.status || message.status === 'sent'"
-                        class="text-[16px] leading-none w-[16px] h-[16px] text-white opacity-80"
-                        title="Sent">done</mat-icon>
+                    <!-- Sent -->
+                    <svg *ngIf="!message.status || message.status === 'sent'" xmlns="http://www.w3.org/2000/svg"
+                        class="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
 
-                    <!-- Delivered (Double Check) -->
-                    <mat-icon *ngIf="message.status === 'delivered'"
-                        class="text-[16px] leading-none w-[16px] h-[16px] text-white opacity-100"
-                        title="Delivered">done_all</mat-icon>
+                    <!-- Delivered -->
+                    <svg *ngIf="message.status === 'delivered'" xmlns="http://www.w3.org/2000/svg"
+                        class="h-3 w-3 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                            d="M7 13l3 3 7-7M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
 
-                    <!-- Seen (Double Check filled/colored) -->
-                    <mat-icon *ngIf="message.status === 'seen'"
-                        class="text-[16px] leading-none w-[16px] h-[16px] text-green-300 font-bold"
-                        title="Seen">done_all</mat-icon>
+                    <!-- Seen -->
+                    <svg *ngIf="message.status === 'seen'" xmlns="http://www.w3.org/2000/svg"
+                        class="h-3 w-3 text-emerald-300 dark:text-emerald-400" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                 </ng-container>
             </div>
         </div>

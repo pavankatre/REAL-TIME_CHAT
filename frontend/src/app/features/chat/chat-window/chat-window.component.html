@@ -1,85 +1,131 @@
-<div class="flex flex-col h-screen bg-gray-50">
+<div class="flex flex-col h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300 overflow-hidden">
     <!-- Chat Header -->
-    <div class="bg-white px-6 py-4 shadow-sm border-b flex items-center justify-between sticky top-0 z-10">
-        <div class="flex items-center space-x-4">
-            <button mat-icon-button routerLink="/home"><mat-icon>arrow_back</mat-icon></button>
+    <header
+        class="glass sticky top-0 z-10 px-6 py-3 flex items-center justify-between border-b border-slate-200 dark:border-slate-800/50">
+        <div class="flex items-center gap-4">
+            <!-- Back Button -->
+            <button routerLink="/home"
+                class="p-2 rounded-xl text-slate-500 hover:text-primary-600 hover:bg-primary-50 dark:text-slate-400 dark:hover:text-primary-400 dark:hover:bg-primary-900/30 transition-all active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </button>
 
-            <!-- Direct Chat Avatar -->
-            <div class="relative" *ngIf="!activeConversation()?.isGroup">
-                <img [src]="otherUser()?.avatarUrl || 'https://via.placeholder.com/40'"
-                    class="w-10 h-10 rounded-full object-cover bg-gray-200">
-                <span *ngIf="getOtherUserStatus() !== 'offline'" [ngClass]="getStatusColor(getOtherUserStatus())"
-                    class="absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full transition-colors duration-300"></span>
-            </div>
+            <!-- Avatar -->
+            <div class="flex items-center gap-3">
+                <!-- Direct Chat Avatar -->
+                <div class="relative group" *ngIf="!activeConversation()?.isGroup">
+                    <img [src]="otherUser()?.avatarUrl || 'https://via.placeholder.com/40'"
+                        class="w-10 h-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-800 shadow-sm transition-transform group-hover:scale-105">
+                    <span *ngIf="getOtherUserStatus() !== 'offline'" [ngClass]="getStatusColor(getOtherUserStatus())"
+                        class="absolute bottom-0 right-0 w-3 h-3 border-2 border-white dark:border-slate-800 rounded-full"></span>
+                </div>
 
-            <!-- Group Avatar -->
-            <div class="relative" *ngIf="activeConversation()?.isGroup">
-                <div
-                    class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xl">
-                    {{ activeConversation()?.groupName?.charAt(0) || 'G' }}
+                <!-- Group Avatar -->
+                <div class="relative" *ngIf="activeConversation()?.isGroup">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-700 dark:text-primary-400 font-bold text-lg shadow-sm">
+                        {{ activeConversation()?.groupName?.charAt(0) || 'G' }}
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="flex flex-col">
+                    <h2 class="font-bold text-slate-800 dark:text-white leading-tight">
+                        {{ activeConversation()?.isGroup ? activeConversation()?.groupName : (otherUser()?.nickname ||
+                        otherUser()?.email || 'Loading...') }}
+                    </h2>
+
+                    <div class="flex items-center gap-1.5 h-4">
+                        <ng-container *ngIf="isTyping()">
+                            <span class="flex gap-1 items-center">
+                                <span class="w-1 h-1 bg-primary-500 rounded-full animate-bounce"></span>
+                                <span
+                                    class="w-1 h-1 bg-primary-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                                <span
+                                    class="w-1 h-1 bg-primary-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                            </span>
+                            <span class="text-[10px] font-medium text-primary-600 dark:text-primary-400">{{ typingUser()
+                                || 'Someone' }} is typing</span>
+                        </ng-container>
+
+                        <ng-container *ngIf="!isTyping()">
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate"
+                                *ngIf="activeConversation()?.isGroup">
+                                {{ groupParticipantsText() }}
+                            </p>
+                            <div class="flex items-center gap-1.5" *ngIf="!activeConversation()?.isGroup">
+                                <span *ngIf="getOtherUserStatus() !== 'offline'"
+                                    class="text-[10px] font-bold uppercase tracking-wider"
+                                    [ngClass]="getOtherUserStatus() === 'online' ? 'text-emerald-500' : 'text-amber-500'">
+                                    {{ getOtherUserStatus() }}
+                                </span>
+                                <span class="text-[10px] text-slate-400 dark:text-slate-500 font-medium"
+                                    *ngIf="getOtherUserStatus() === 'offline' && otherUser()?.lastSeen">
+                                    Last seen {{ otherUser()?.lastSeen | date:'shortTime' }}
+                                </span>
+                            </div>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
-
-            <!-- Title and Subtitle -->
-            <div>
-                <h2 class="font-semibold text-gray-800">
-                    {{ activeConversation()?.isGroup ? activeConversation()?.groupName : (otherUser()?.nickname ||
-                    otherUser()?.email || 'Loading...') }}
-                </h2>
-
-                <p class="text-xs text-brand-green italic" *ngIf="isTyping()">{{ typingUser() || 'Someone' }} is
-                    typing...</p>
-
-                <ng-container *ngIf="!isTyping()">
-                    <p class="text-xs text-gray-500 truncate mt-0.5" *ngIf="activeConversation()?.isGroup">{{
-                        groupParticipantsText() }}</p>
-                    <p class="text-xs font-semibold"
-                        [ngClass]="getOtherUserStatus() === 'online' ? 'text-green-500' : (getOtherUserStatus() === 'busy' ? 'text-red-500' : 'text-gray-500')"
-                        *ngIf="!activeConversation()?.isGroup && getOtherUserStatus() !== 'offline'">
-                        {{ getOtherUserStatus() | titlecase }}
-                    </p>
-                    <p class="text-xs text-gray-400"
-                        *ngIf="!activeConversation()?.isGroup && getOtherUserStatus() === 'offline' && otherUser()?.lastSeen">
-                        Last seen: {{ otherUser()?.lastSeen | date:'short' }}
-                    </p>
-                </ng-container>
-            </div>
         </div>
 
-        <!-- Group Settings Button -->
-        <div *ngIf="activeConversation()?.isGroup">
-            <button mat-icon-button color="primary" (click)="openGroupSettings()">
-                <mat-icon>info</mat-icon>
+        <!-- Right Side Header -->
+        <div class="flex items-center gap-2">
+            <button *ngIf="activeConversation()?.isGroup" (click)="openGroupSettings()"
+                class="p-2 rounded-xl text-slate-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:text-primary-400 dark:hover:bg-primary-900/30 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                </svg>
             </button>
         </div>
-    </div>
+    </header>
 
     <!-- Messages Area -->
-    <div #messagesContainer class="flex-1 overflow-y-auto p-4 space-y-4" (scroll)="onScroll($event)">
-        <div *ngIf="isLoadingMore()" class="flex justify-center py-2">
-            <mat-spinner diameter="20"></mat-spinner>
+    <main #messagesContainer class="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth custom-scrollbar"
+        (scroll)="onScroll($event)">
+        <!-- Loader -->
+        <div *ngIf="isLoadingMore()" class="flex justify-center py-4">
+            <div class="w-6 h-6 border-2 border-primary-500/20 border-t-primary-500 rounded-full animate-spin"></div>
         </div>
 
+        <!-- Message List -->
         <app-message-bubble *ngFor="let msg of messages()" [message]="msg" [isMine]="msg.sender._id === currentUserId"
-            [isGroup]="activeConversation()?.isGroup || false"></app-message-bubble>
+            [isGroup]="activeConversation()?.isGroup || false" class="animate-fade-in"></app-message-bubble>
 
+        <!-- Empty State -->
         <div *ngIf="messages().length === 0 && !isLoading()"
-            class="h-full flex items-center justify-center text-gray-400">
-            No messages yet. Say hello!
+            class="h-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 opacity-50 space-y-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <p class="font-medium">No messages yet. Say hello!</p>
         </div>
-    </div>
+    </main>
 
     <!-- Input Area -->
-    <div class="bg-white p-4 border-t">
-        <form (ngSubmit)="sendMessage()" class="flex items-center space-x-2 relative">
+    <footer class="p-4 glass border-t border-slate-200 dark:border-slate-800/50">
+        <form (ngSubmit)="sendMessage()"
+            class="max-w-4xl mx-auto flex items-end gap-3 rounded-2xl p-1 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 focus-within:ring-2 focus-within:ring-primary-500/20 focus-within:border-primary-500 transition-all">
             <input type="text" [(ngModel)]="newMessage" name="newMessage" placeholder="Type a message..."
-                class="flex-1 bg-gray-100 rounded-full px-6 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                class="flex-1 px-4 py-3 bg-transparent text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none min-h-[48px]"
                 (input)="onTyping()" autocomplete="off" [disabled]="isLoading()">
-            <button type="submit" color="primary"
-                class="bg-indigo-600 text-white h-12 w-12 rounded-full flex items-center justify-center hover:bg-indigo-700 transition disabled:opacity-50"
-                [disabled]="!newMessage.trim() || isLoading()">
-                <mat-icon>send</mat-icon>
+
+            <button type="submit" [disabled]="!newMessage.trim() || isLoading()"
+                class="bg-primary-600 hover:bg-primary-500 disabled:bg-slate-200 dark:disabled:bg-slate-700 disabled:text-slate-400 dark:disabled:text-slate-500 text-white h-11 w-11 rounded-xl flex items-center justify-center shadow-lg shadow-primary-600/20 transition-all active:scale-90">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-45 -translate-y-0.5" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
             </button>
         </form>
-    </div>
+    </footer>
 </div>

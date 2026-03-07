@@ -19,7 +19,7 @@ import { CreateGroupModal } from '../chat/create-group-modal/create-group-modal.
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, MatButtonModule, MatCardModule, MatToolbarModule, MatIconModule, MatListModule, MatInputModule, MatDialogModule, MatProgressSpinnerModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

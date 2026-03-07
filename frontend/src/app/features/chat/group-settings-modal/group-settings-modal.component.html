@@ -1,75 +1,149 @@
-<div class="flex items-center justify-between pr-4">
-    <h2 mat-dialog-title>Group Info</h2>
-    <button mat-icon-button (click)="dialogRef.close()"><mat-icon>close</mat-icon></button>
-</div>
-
-<mat-dialog-content class="w-full max-w-md pt-2">
-    <!-- Group Details -->
-    <div class="flex flex-col items-center mb-6">
-        <div
-            class="w-20 h-20 rounded-2xl bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-3xl mb-3 shadow-sm">
-            {{ groupName.charAt(0) || 'G' }}
-        </div>
-        <div *ngIf="!isEditingName" class="flex items-center space-x-2">
-            <h3 class="text-xl font-bold text-gray-800">{{ groupName }}</h3>
-            <button mat-icon-button color="primary" *ngIf="isAdmin" (click)="isEditingName = true"><mat-icon
-                    class="text-sm">edit</mat-icon></button>
-        </div>
-        <div *ngIf="isEditingName" class="flex items-center space-x-2 w-full px-4">
-            <input type="text" [(ngModel)]="editNameInput"
-                class="flex-1 px-3 py-1 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none">
-            <button mat-icon-button color="primary" (click)="saveName()"><mat-icon>check</mat-icon></button>
-            <button mat-icon-button color="warn" (click)="isEditingName = false"><mat-icon>close</mat-icon></button>
-        </div>
-        <p class="text-sm text-gray-500 mt-1">{{ participants().length }} members</p>
+<div class="p-6 bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full animate-fade-in transition-colors duration-300">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Group Details</h2>
+        <button (click)="dialogRef.close()"
+            class="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
     </div>
 
-    <!-- Add Participants (Admin Only) -->
-    <div *ngIf="isAdmin" class="mb-6">
-        <div class="relative">
-            <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearch()"
-                placeholder="Search to add members..."
-                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 outline-none pl-10">
-            <mat-icon class="absolute left-3 top-2.5 text-gray-400">person_add</mat-icon>
+    <!-- Group Profile -->
+    <div class="flex flex-col items-center mb-8 pb-8 border-b border-slate-100 dark:border-slate-800">
+        <div
+            class="w-24 h-24 rounded-3xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-700 dark:text-primary-400 font-bold text-4xl mb-4 shadow-sm">
+            {{ groupName.charAt(0) || 'G' }}
         </div>
-        <div *ngIf="searchResults().length > 0" class="mt-2 border rounded-md max-h-32 overflow-y-auto">
-            <div *ngFor="let user of searchResults()"
-                class="p-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between"
-                (click)="addParticipant(user)">
-                <div class="flex items-center space-x-2">
-                    <img [src]="user.avatarUrl || 'https://via.placeholder.com/30'"
-                        class="w-6 h-6 rounded-full object-cover bg-gray-200">
-                    <span class="text-sm font-medium">{{ user.email }}</span>
+
+        <div class="w-full">
+            <div *ngIf="!isEditingName" class="flex items-center justify-center gap-2 group">
+                <h3 class="text-xl font-bold text-slate-800 dark:text-white">{{ groupName }}</h3>
+                <button *ngIf="isAdmin" (click)="isEditingName = true"
+                    class="p-1.5 text-slate-400 hover:text-primary-600 opacity-0 group-hover:opacity-100 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div *ngIf="isEditingName" class="flex items-center gap-2 px-2 animate-fade-in">
+                <input type="text" [(ngModel)]="editNameInput"
+                    class="flex-1 px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all dark:text-white">
+                <div class="flex gap-1">
+                    <button (click)="saveName()"
+                        class="p-2 text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 rounded-lg transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </button>
+                    <button (click)="isEditingName = false"
+                        class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
-                <mat-icon class="text-brand-green text-sm">add_circle</mat-icon>
+            </div>
+        </div>
+        <p class="text-xs font-bold text-slate-400 dark:text-slate-500 mt-2 uppercase tracking-widest">{{
+            participants().length }} members</p>
+    </div>
+
+    <!-- Admin Tools: Add Member -->
+    <div *ngIf="isAdmin" class="mb-8">
+        <h4 class="text-sm font-bold text-slate-800 dark:text-white mb-3 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary-500" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+            Add New Member
+        </h4>
+        <div class="relative group">
+            <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearch()" placeholder="Search by email..."
+                class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all pl-11 dark:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-primary-500 transition-colors"
+                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
+
+        <!-- Search Results -->
+        <div *ngIf="searchResults().length > 0"
+            class="mt-2 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 shadow-xl max-h-40 overflow-y-auto custom-scrollbar animate-fade-in divide-y divide-slate-100 dark:divide-slate-700/50">
+            <div *ngFor="let user of searchResults()"
+                class="p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer flex items-center justify-between"
+                (click)="addParticipant(user)">
+                <div class="flex items-center gap-3">
+                    <img [src]="user.avatarUrl || 'https://via.placeholder.com/30'"
+                        class="w-8 h-8 rounded-full object-cover shadow-sm">
+                    <span class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ user.email }}</span>
+                </div>
+                <button
+                    class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Member List -->
-    <div>
-        <h4 class="font-semibold text-gray-700 mb-2 border-b pb-1">Members</h4>
-        <mat-list>
-            <mat-list-item *ngFor="let p of participants()" class="px-0">
-                <div class="flex items-center justify-between w-full">
-                    <div class="flex items-center space-x-3">
+    <!-- Participants List -->
+    <div class="space-y-4 max-h-64 overflow-y-auto custom-scrollbar pr-2">
+        <h4 class="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest pl-1">Members</h4>
+        <div class="space-y-2">
+            <div *ngFor="let p of participants()"
+                class="group flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
                         <img [src]="p.avatarUrl || 'https://via.placeholder.com/35'"
-                            class="w-8 h-8 rounded-full object-cover bg-gray-200">
-                        <div>
-                            <p class="font-medium text-sm text-gray-800 flex items-center gap-2">
-                                {{ p.email === currentUserEmail ? 'You' : p.email }}
-                                <span *ngIf="p._id === data.admin"
-                                    class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-bold">Admin</span>
-                            </p>
-                        </div>
+                            class="w-10 h-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-800 shadow-sm">
+                        <span *ngIf="p._id === data.admin"
+                            class="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 rounded-full border-2 border-white dark:border-slate-800 flex items-center justify-center"
+                            title="Group Admin">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 text-white" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                        </span>
                     </div>
-                    <button *ngIf="isAdmin && p._id !== currentUserId" mat-icon-button color="warn"
-                        matTooltip="Remove from group" (click)="removeParticipant(p._id)" [disabled]="isLoading()">
-                        <mat-icon>person_remove</mat-icon>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-bold text-slate-700 dark:text-slate-200">
+                            {{ p.email === currentUserEmail ? 'You' : p.email.split('@')[0] }}
+                        </span>
+                        <span class="text-[10px] text-slate-400 font-medium">{{ p.email }}</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <span *ngIf="p._id === data.admin"
+                        class="text-[10px] font-bold text-amber-500 uppercase tracking-tighter">Admin</span>
+
+                    <button *ngIf="isAdmin && p._id !== currentUserId" (click)="removeParticipant(p._id)"
+                        [disabled]="isLoading()"
+                        class="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all opacity-0 group-hover:opacity-100 disabled:opacity-30">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
                     </button>
                 </div>
-            </mat-list-item>
-        </mat-list>
+            </div>
+        </div>
     </div>
-
-</mat-dialog-content>
+</div>

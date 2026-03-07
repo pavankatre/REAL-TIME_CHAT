@@ -64,9 +64,18 @@ export class AuthService {
 
     login(credentials: any): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/login`, credentials, { withCredentials: true }).pipe(
-            tap(res => {
-                if (res.accessToken) {
-                    this.setAuth(res.accessToken, res.user);
+            tap({
+                next: (res) => {
+                    if (res.accessToken) {
+                        this.setAuth(res.accessToken, res.user);
+                    }
+                },
+                error: (err) => {
+                    if (err.error?.message === 'Please verify your email first') {
+                        console.warn(`[AuthService] Login attempt with unverified email: ${credentials.email}`);
+                    } else {
+                        console.error(`[AuthService] Login failed for ${credentials.email}:`, err.error?.message || err.message);
+                    }
                 }
             })
         );
