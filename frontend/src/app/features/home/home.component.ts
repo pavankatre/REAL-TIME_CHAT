@@ -6,7 +6,10 @@ import { AuthService } from '../../core/services/auth.service';
 import { UserService, UserProfile } from '../../core/services/user.service';
 import { ChatService, Conversation } from '../../core/services/chat.service';
 import { SocketService } from '../../core/services/socket.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { CreateGroupModal } from '../chat/create-group-modal/create-group-modal.component';
+import { Subscription } from 'rxjs';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -26,12 +29,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   searchTimeout: any;
 
   isCreateGroupModalOpen = signal(false);
+  isNotificationPanelOpen = signal(false);
+  private messageSubscription?: Subscription;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private chatService: ChatService,
     public socketService: SocketService,
+    public notificationService: NotificationService,
     private router: Router
   ) {
     this.currentUser = this.authService.currentUser;
@@ -45,11 +51,30 @@ export class HomeComponent implements OnInit, OnDestroy {
       // Group changed, reload conversations
       this.loadConversations();
     };
+
+    // Global listener for notifications
+    this.messageSubscription = this.socketService.newMessage$.subscribe(msg => {
+      // Only notify if we are NOT in the chat window of this conversation
+      // We check URL as a simple way to know if we are in chat window
+      const isCurrentChat = this.router.url.includes(`/chat/${msg.conversationId}`);
+
+      if (!isCurrentChat && msg.sender._id !== this.currentUser()?.id) {
+        this.notificationService.addNotification(msg);
+        this.loadConversations(); // Update last message in list
+      }
+    });
+  }
+
+  @HostListener('document:click', ['$event'])
+  @HostListener('document:keydown', ['$event'])
+  onUserInteraction() {
+    this.notificationService.unlockAudio();
   }
 
   ngOnDestroy() {
     clearTimeout(this.searchTimeout);
     this.socketService.onGroupUpdatedCallback = null;
+    this.messageSubscription?.unsubscribe();
   }
 
   loadConversations() {
@@ -98,6 +123,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   openConversation(conversationId: string) {
     this.router.navigate(['/chat', conversationId]);
+  }
+
+  toggleNotificationPanel() {
+    this.isNotificationPanelOpen.update(v => !v);
+    if (this.isNotificationPanelOpen()) {
+      // Notification panel opened
+    }
   }
 
   deleteConversation(event: MouseEvent, conversationId: string) {

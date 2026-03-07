@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal } from '@an
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ChatService, Conversation, Message, PaginatedMessages } from '../../../core/services/chat.service';
 import { SocketService } from '../../../core/services/socket.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -38,6 +39,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     typingTimeout: any;
 
     isSettingsOpen = signal(false);
+    private messageSubscription?: Subscription;
 
     constructor(
         private route: ActivatedRoute,
@@ -60,20 +62,20 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
         this.loadConversationDetails();
         this.loadMessages();
 
-        // Event Bus Callbacks
-        this.socketService.onNewMessageCallback = (msg: Message) => {
+        // Subscribe to New Messages
+        this.messageSubscription = this.socketService.newMessage$.subscribe((msg: Message) => {
             if (msg.conversationId === this.conversationId) {
                 // Optimistic UI, append at end
                 this.messages.update(prev => [...prev, msg]);
                 this.scrollToBottom();
 
-                // If I am not the sender, mark it as delivered then seen since I am active in the room
+                // If I am not the sender, mark it as delivered then seen
                 if (msg.sender._id !== this.currentUserId) {
                     this.socketService.markMessageDelivered(msg._id, this.conversationId!);
                     this.socketService.markMessageSeen(msg._id, this.conversationId!);
                 }
             }
-        };
+        });
 
         this.socketService.onTypingStatusCallback = (data: { userId: string, user?: { email: string, avatarUrl: string }, conversationId: string }, typing: boolean) => {
             if (data.conversationId === this.conversationId && data.userId !== this.currentUserId) {
@@ -105,7 +107,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.socketService.onNewMessageCallback = null;
+        this.messageSubscription?.unsubscribe();
         this.socketService.onTypingStatusCallback = null;
         this.socketService.onMessageStatusUpdateCallback = null;
         this.socketService.onGroupUpdatedCallback = null;
