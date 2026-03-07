@@ -54,4 +54,11 @@ export class LoginComponent {
       });
     }
   }
+
+  onVerifyEmail() {
+    const email = this.loginForm.get('email')?.value;
+    if (email) {
+      this.router.navigate(['/otp'], { state: { email } });
+    }
+  }
 }

@@ -62,8 +62,13 @@
 
             <!-- Global Error -->
             <div *ngIf="errorMessage()"
-                class="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-xs text-center animate-fade-in">
-                {{ errorMessage() }}
+                class="p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-xs animate-fade-in flex flex-col items-center gap-2">
+                <span class="text-center">{{ errorMessage() }}</span>
+                <button *ngIf="errorMessage() === 'Please verify your email first'" type="button"
+                    (click)="onVerifyEmail()"
+                    class="text-xs font-bold text-primary-600 dark:text-primary-400 hover:text-primary-500 transition-colors underline underline-offset-4">
+                    Verify Email
+                </button>
             </div>
 
             <!-- Submit Button -->
