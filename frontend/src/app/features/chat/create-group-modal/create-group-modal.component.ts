@@ -1,11 +1,6 @@
-import { Component, Inject, signal } from '@angular/core';
+import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
 import { ChatService } from '../../../core/services/chat.service';
 import { UserProfile } from '../../../core/services/user.service';
 
@@ -17,6 +12,9 @@ import { UserProfile } from '../../../core/services/user.service';
   styleUrl: './create-group-modal.component.css'
 })
 export class CreateGroupModal {
+  @Output() close = new EventEmitter<void>();
+  @Output() created = new EventEmitter<any>();
+
   groupName = '';
   searchQuery = '';
   searchResults = signal<UserProfile[]>([]);
@@ -24,7 +22,6 @@ export class CreateGroupModal {
   isLoading = signal(false);
 
   constructor(
-    public dialogRef: MatDialogRef<CreateGroupModal>,
     private chatService: ChatService
   ) { }
 
@@ -61,7 +58,7 @@ export class CreateGroupModal {
     this.chatService.createGroup(this.groupName, participantIds).subscribe({
       next: (convo) => {
         this.isLoading.set(false);
-        this.dialogRef.close(convo); // Return the new conversation
+        this.created.emit(convo); // Return the new conversation
       },
       error: () => this.isLoading.set(false)
     });
