@@ -6,17 +6,12 @@ import { ChatService, Conversation, Message, PaginatedMessages } from '../../../
 import { SocketService } from '../../../core/services/socket.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { MessageBubbleComponent } from '../message-bubble/message-bubble.component';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { GroupSettingsModal } from '../group-settings-modal/group-settings-modal.component';
 
 @Component({
     selector: 'app-chat-window',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink, MessageBubbleComponent],
+    imports: [CommonModule, FormsModule, RouterLink, MessageBubbleComponent, GroupSettingsModal],
     templateUrl: './chat-window.component.html',
     styleUrl: './chat-window.component.css'
 })
@@ -42,13 +37,14 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     typingUser = signal<string>(''); // specific user for groups
     typingTimeout: any;
 
+    isSettingsOpen = signal(false);
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private chatService: ChatService,
         public socketService: SocketService,
-        private authService: AuthService,
-        private dialog: MatDialog
+        private authService: AuthService
     ) {
         const user = this.authService.currentUser();
         this.currentUserId = user ? (user as any).id : '';
@@ -177,13 +173,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     openGroupSettings() {
         const convo = this.activeConversation();
         if (!convo || !convo.isGroup) return;
-
-        const dialogRef = this.dialog.open(GroupSettingsModal, {
-            width: '500px',
-            data: convo
-        });
-
-        // Backend events handle dynamic list update if members change, which triggers the onGroupUpdated event to refresh.
+        this.isSettingsOpen.set(true);
     }
 
     groupParticipantsText(): string {

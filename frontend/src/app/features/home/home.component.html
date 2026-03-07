@@ -213,3 +213,8 @@
         </div>
     </main>
 </div>
+
+<!-- Modals -->
+<app-create-group-modal *ngIf="isCreateGroupModalOpen()" (close)="isCreateGroupModalOpen.set(false)"
+    (created)="onGroupCreated($event)">
+</app-create-group-modal>

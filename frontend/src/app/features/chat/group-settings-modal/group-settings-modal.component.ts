@@ -1,11 +1,6 @@
-import { Component, Inject, signal, OnInit } from '@angular/core';
+import { Component, Inject, signal, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
 import { ChatService, Conversation } from '../../../core/services/chat.service';
 import { UserProfile, UserService } from '../../../core/services/user.service';
 
@@ -17,6 +12,9 @@ import { UserProfile, UserService } from '../../../core/services/user.service';
   styleUrl: './group-settings-modal.component.css'
 })
 export class GroupSettingsModal implements OnInit {
+  @Input({ required: true }) data!: Conversation;
+  @Output() close = new EventEmitter<void>();
+
   groupName = '';
   participants = signal<UserProfile[]>([]);
   isAdmin = false;
@@ -33,23 +31,21 @@ export class GroupSettingsModal implements OnInit {
   isLoading = signal(false);
 
   constructor(
-    public dialogRef: MatDialogRef<GroupSettingsModal>,
-    @Inject(MAT_DIALOG_DATA) public data: Conversation,
     private chatService: ChatService,
     private userService: UserService
-  ) {
-    this.groupName = data.groupName || 'Group Chat';
+  ) { }
+
+  ngOnInit() {
+    this.groupName = this.data.groupName || 'Group Chat';
     this.editNameInput = this.groupName;
-    this.participants.set(data.participants);
+    this.participants.set(this.data.participants);
 
     const currentProfile = this.userService.userProfile();
     this.currentUserId = currentProfile?._id || '';
     this.currentUserEmail = currentProfile?.email || '';
 
-    this.isAdmin = data.admin === this.currentUserId;
+    this.isAdmin = this.data.admin === this.currentUserId;
   }
-
-  ngOnInit() { }
 
   saveName() {
     if (!this.editNameInput.trim() || this.editNameInput === this.groupName) {
