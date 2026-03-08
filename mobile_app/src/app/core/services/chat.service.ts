@@ -1,0 +1,77 @@
+import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { UserProfile } from './user.service';
+
+export interface Message {
+    _id: string;
+    conversationId: string;
+    sender: UserProfile;
+    text: string;
+    status: 'sent' | 'delivered' | 'seen';
+    seenBy: string[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface Conversation {
+    _id: string;
+    participants: UserProfile[];
+    lastMessage?: Message;
+    isGroup: boolean;
+    groupName?: string;
+    admin?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface PaginatedMessages {
+    messages: Message[];
+    pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        hasMore: boolean;
+    };
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ChatService {
+    private apiUrl = environment.apiUrl + '/chat';
+
+    public conversations = signal<Conversation[]>([]);
+    public activeConversationId = signal<string | null>(null);
+    public activeMessages = signal<Message[]>([]);
+
+    constructor(private http: HttpClient) {
+        console.log('[Mobile ChatService] Initialized');
+    }
+
+    searchUsers(query: string): Observable<UserProfile[]> {
+        return this.http.get<UserProfile[]>(`${this.apiUrl}/search?q=${query}`, { withCredentials: true });
+    }
+
+    getConversations(): Observable<Conversation[]> {
+        console.log('[Mobile ChatService] Fetching conversations');
+        return this.http.get<Conversation[]>(`${this.apiUrl}/conversations`, { withCredentials: true });
+    }
+
+    getOrCreateConversation(targetUserId: string): Observable<Conversation> {
+        return this.http.post<Conversation>(`${this.apiUrl}/conversations`, { targetUserId }, { withCredentials: true });
+    }
+
+    createGroup(groupName: string, participants: string[]): Observable<Conversation> {
+        return this.http.post<Conversation>(`${this.apiUrl}/groups`, { groupName, participants }, { withCredentials: true });
+    }
+
+    getMessages(conversationId: string, page: number = 1, limit: number = 20): Observable<PaginatedMessages> {
+        return this.http.get<PaginatedMessages>(`${this.apiUrl}/conversations/${conversationId}/messages?page=${page}&limit=${limit}`, { withCredentials: true });
+    }
+
+    deleteConversation(conversationId: string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/conversations/${conversationId}`, { withCredentials: true });
+    }
+}
