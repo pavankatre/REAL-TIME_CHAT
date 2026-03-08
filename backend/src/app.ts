@@ -9,7 +9,10 @@ import { env } from './config/env';
 const app: Application = express();
 
 // Security Middleware
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" }
+}));
 
 const allowedOrigins = env.ALLOWED_ORIGINS.split(',');
 
