@@ -23,7 +23,8 @@ import { AuthService } from '../../../core/services/auth.service';
           <ion-back-button defaultHref="/tabs/chat-list"></ion-back-button>
         </ion-buttons>
         <ion-avatar slot="start" class="header-avatar">
-          <img [src]="otherUser()?.avatarUrl || 'assets/default-avatar.svg'" />
+          <img [src]="otherUser()?.avatarUrl || 'assets/default-avatar.svg'" 
+               (error)="$event.target.src = 'https://ui-avatars.com/api/?name=' + (otherUser()?.nickname || otherUser()?.email)" />
         </ion-avatar>
         <ion-title>
           <div class="header-title">

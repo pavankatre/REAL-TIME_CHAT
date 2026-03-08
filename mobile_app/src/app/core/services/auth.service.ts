@@ -114,6 +114,6 @@ export class AuthService {
 
     private handleLogout() {
         this.clearAuth();
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
     }
 }

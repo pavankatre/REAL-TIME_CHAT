@@ -63,9 +63,10 @@ import { AuthService } from '../../../core/services/auth.service';
           </div>
 
           <ion-button expand="block" type="submit" [disabled]="loginForm.invalid || isLoading()" class="ion-margin-top main-btn">
-            <span *ngIf="!isLoading()">Sign In</span>
-            <ion-loading [isOpen]="isLoading()" message="Authenticating..."></ion-loading>
+            Sign In
           </ion-button>
+
+          <ion-loading [isOpen]="isLoading()" message="Authenticating..." [duration]="5000"></ion-loading>
 
           <div *ngIf="errorMessage()" class="ion-padding ion-text-center">
             <ion-text color="danger">{{ errorMessage() }}</ion-text>

@@ -8,7 +8,7 @@ import {
   IonSpinner, IonText, IonButtons, IonButton, IonItemDivider
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { add, search, trash } from 'ionicons/icons';
+import { add, search, trash, logOutOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 import { UserService, UserProfile } from '../../../core/services/user.service';
 import { ChatService, Conversation } from '../../../core/services/chat.service';
@@ -21,8 +21,11 @@ import { SocketService } from '../../../core/services/socket.service';
       <ion-toolbar>
         <ion-title>Messages</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="loadConversations()">
-            <ion-spinner *ngIf="isLoading()" name="crescent" size="small"></ion-spinner>
+          <ion-button (click)="loadConversations()" *ngIf="isLoading()">
+            <ion-spinner name="crescent" size="small"></ion-spinner>
+          </ion-button>
+          <ion-button color="danger" (click)="logout()">
+            <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -44,7 +47,8 @@ import { SocketService } from '../../../core/services/socket.service';
         </ion-item-divider>
         <ion-item *ngFor="let user of searchResults()" (click)="startChat(user._id)" button>
           <ion-avatar slot="start">
-            <img [src]="user.avatarUrl || 'assets/default-avatar.svg'" />
+            <img [src]="user.avatarUrl || 'assets/default-avatar.svg'" 
+                 (error)="$event.target.src = 'https://ui-avatars.com/api/?name=' + (user.nickname || user.email)" />
           </ion-avatar>
           <ion-label>
             <h2>{{ user.nickname || user.email }}</h2>
@@ -65,7 +69,8 @@ import { SocketService } from '../../../core/services/socket.service';
                 <div class="group-avatar">{{ convo.groupName?.charAt(0) }}</div>
             </ng-container>
             <ng-template #privateAvatar>
-               <img [src]="getOtherParticipant(convo)?.avatarUrl || 'assets/default-avatar.svg'" />
+               <img [src]="getOtherParticipant(convo)?.avatarUrl || 'assets/default-avatar.svg'" 
+                    (error)="$event.target.src = 'https://ui-avatars.com/api/?name=' + (getOtherParticipant(convo)?.nickname || getOtherParticipant(convo)?.email)" />
             </ng-template>
           </ion-avatar>
           <ion-label>
@@ -136,7 +141,7 @@ export class ChatListPage implements OnInit {
     public socketService: SocketService,
     private router: Router
   ) {
-    addIcons({ add, search, trash });
+    addIcons({ add, search, trash, logOutOutline });
     this.currentUser = this.authService.currentUser;
   }
 
@@ -197,5 +202,11 @@ export class ChatListPage implements OnInit {
 
   isUserOnline(userId: string): boolean {
     return this.socketService.onlineUsers().has(userId);
+  }
+
+  logout() {
+    this.socketService.disconnect();
+    this.authService.logout();
+    this.router.navigate(['/auth/login']);
   }
 }
