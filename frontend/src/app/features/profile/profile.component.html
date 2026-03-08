@@ -45,6 +45,31 @@
         </div>
 
         <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="space-y-8">
+            <!-- Default Avatar Selection -->
+            <div class="space-y-4">
+                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Choose a Default
+                    Avatar</label>
+                <div class="flex flex-wrap gap-4">
+                    <button type="button" *ngFor="let avatar of defaultAvatars" (click)="selectAvatar(avatar)"
+                        class="avatar-grid-item relative w-14 h-14 rounded-xl overflow-hidden border-2 transition-all hover:scale-110 active:scale-95 shadow-sm"
+                        [ngClass]="{
+                            'selected border-primary-500 ring-2 ring-primary-500/20 scale-110 shadow-lg shadow-primary-500/10': profileForm.get('avatarUrl')?.value === avatar,
+                            'border-slate-200 dark:border-slate-700 hover:border-primary-400': profileForm.get('avatarUrl')?.value !== avatar
+                        }">
+                        <img [src]="avatar" alt="Default Avatar" class="w-full h-full object-cover">
+                        <div *ngIf="profileForm.get('avatarUrl')?.value === avatar"
+                            class="absolute inset-0 bg-primary-500/10 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
             <!-- Avatar URL Field -->
             <div class="space-y-2">
                 <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Avatar URL</label>
