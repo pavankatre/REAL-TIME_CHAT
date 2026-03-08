@@ -17,6 +17,19 @@ export class ProfileComponent implements OnInit {
   message = signal<string | null>(null);
   isSuccess = signal(false);
 
+  defaultAvatars = [
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Felix',
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Jude',
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Liam',
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Owen',
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Finn',
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Mimi',
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Sasha',
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Willow',
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Cleo',
+    'https://api.dicebear.com/7.x/adventurer/png?seed=Zoey'
+  ];
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -90,5 +103,10 @@ export class ProfileComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+  selectAvatar(url: string) {
+    this.profileForm.patchValue({ avatarUrl: url });
+    this.profileForm.get('avatarUrl')?.markAsDirty();
   }
 }
