@@ -3,6 +3,7 @@
     transform: scale(1.1);
 }
 
+
 .avatar-grid-item.selected {
     border-color: var(--color-primary-500);
     box-shadow: 0 10px 15px -3px rgba(var(--color-primary-500), 0.1);

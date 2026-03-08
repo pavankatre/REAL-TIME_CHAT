@@ -17,7 +17,7 @@
             <div class="flex items-center gap-3">
                 <!-- Direct Chat Avatar -->
                 <div class="relative group" *ngIf="!activeConversation()?.isGroup">
-                    <img [src]="otherUser()?.avatarUrl || '/assets/default-avatar.svg'"
+                    <img [src]="otherUser()?.avatarUrl || 'assets/default-avatar.svg'"
                         class="w-10 h-10 rounded-full object-cover ring-2 ring-white dark:ring-slate-800 shadow-sm transition-transform group-hover:scale-105">
                     <span *ngIf="getOtherUserStatus() !== 'offline'" [ngClass]="getStatusColor(getOtherUserStatus())"
                         class="absolute bottom-0 right-0 w-3 h-3 border-2 border-white dark:border-slate-800 rounded-full"></span>
